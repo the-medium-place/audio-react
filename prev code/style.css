@@ -1,0 +1,91 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="range"] {
+    width: 28rem;
+    position: absolute;
+    left: -25rem;
+ }
+
+.jumbotron {
+    overflow: scroll;
+    max-height: 30vh;
+}
+
+/* .modal-content {
+    width: 80vw;
+    margin: auto;
+  } */
+
+ .btn-box {
+     display: flex;
+     margin: 0 auto;
+     margin-bottom: 20px;
+ }
+
+ .spacer {
+     height: 200px;
+ 
+ }
+
+ .update-space {
+     background: salmon;
+     color: teal;
+ }
+
+ .slider-box {
+     transform: rotate(270deg);
+     width: 14.28%;
+ }
+
+ .hz {
+     margin: 0 auto;
+     font-size: 2rem;
+     font-weight: bold;
+ }
+
+ .hz-box, .act-box {
+     width: 14.28%;
+ }
+
+ .slider-wrapper, .slider-labels {
+     display: flex;
+     justify-content: space-between;
+     margin: 0 auto;
+     height: auto;
+ }
+ .val-output {
+     height: 1.3rem;
+ }
+
+ #l-ear-btn {
+    background: rgb(0, 0, 125);
+    color: white;
+ }
+
+ #l-ear-btn:hover {
+     background: rgb(0, 0, 200);
+ }
+
+ #r-ear-btn {
+    background: rgb(125, 0, 0);
+    color: white;
+ }
+
+ #r-ear-btn:hover {
+     background: rgb(200, 0, 0);
+ }
+
+ @media only screen and (max-width: 1000px) {
+    .hz, .val-output, .act-box {
+        font-size: .9rem;
+    }
+ }
+
+ @media only screen and (max-width: 1000px) {
+    .hz, .val-output, .act-box {
+        font-size: .7rem;
+    }
+ }

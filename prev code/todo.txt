@@ -1,0 +1,18 @@
+audio:
+- get specific about mixing needs:
+    - split recording to stereo mixing to allow diff mix for each ear
+    - assign r-ear and l-ear mix to match embedded chart values
+
+chart functionality:
+- last thing to do is make sure that sliders react as soon as data is present on chart (currently waiting for user to drag and adjust)
+
+app logistics:
+- migrate app to React
+- set up database to hold user info and save user sound settings
+- 
+
+
+
+NOTES:
+===========================================================================
+Added screenshot of mock-audiologist report (taken from Praxis study guide), beginning of audiology/audio engineering research.
