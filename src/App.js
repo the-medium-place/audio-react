@@ -1,23 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Jumbotron, Col, Row, Container } from 'react-bootstrap'
+import Chart from './components/Chart';
+import MainPage from './pages/MainPage';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Jumbotron>
+          <h1> Setting up Audio React </h1>
+          <p className="lead">Testing some after text.</p>
+        </Jumbotron>
+        <Container>
+          <Switch>
+            <Route exact path={['/', '/home']}>
+              <MainPage />
+            </Route>
+            <Route exact path="/chart">
+              <Chart />
+            </Route>
+            <Route exact path="*">
+              <h1>404 not found</h1>
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
+
+      {/* <Jumbotron>
+        <h1> Setting up Audio React </h1>
+        <p className="lead">Testing some after text.</p>
+      </Jumbotron>
+      <Container>
+        <Row>
+          <h1>will be button to open ear chart modal</h1>
+        </Row>
+      </Container> */}
     </div>
   );
 }
