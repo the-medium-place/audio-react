@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Jumbotron, Col, Row, Container } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Col, Row, Button } from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
-import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
+// import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
 
 
 
 export default function Chart(props) {
+
+    const [showState, setShowState] = useState(true);
+    const [earState, setEarState] = useState(false);
+
 
     const chartData = {
         labels: ['125hz', '250hz', '500hz', '1000hz', '2000hz', '4000hz', '8000hz'],
@@ -72,27 +76,23 @@ export default function Chart(props) {
             }
 
             // IF earClick IS true, SET POINTS FOR RIGHT EAR, ELSE SET POINTS FOR LEFT EAR
-            if (props.earState === true) {
+            if (earState === true) {
                 const arrCopy = [...props.rightEarDecibels]
-
                 arrCopy.splice(valueX, 1, Math.floor(valueY))
                 props.setRightEarDecibels(arrCopy);
-                // props.setRightEarDecibels(newData);
-            } else if (props.earState === false) {
+                // console.log(props.rightEarDecibels);
+            } else if (earState === false) {
                 const arrCopy = [...props.leftEarDecibels]
-
                 arrCopy.splice(valueX, 1, Math.floor(valueY))
                 props.setLeftEarDecibels(arrCopy);
-                // props.leftEarDecibels.splice(valueX, 1, Math.floor(valueY));
-                // console.log(props.leftEarDecibels);
-                // props.setLeftEarDecibels(newData);
+                // console.log(props.leftEarDecibels)
             }
 
             // IF DATA PRESENT AT SAME INDEX FOR BOTH DATASETS, SET SLIDER TO AVERAGE VALUE
-            let avgVal;
-            if (this.data.datasets[0].data[valueX] && this.data.datasets[1].data[valueX]) {
-                avgVal = Math.floor((this.data.datasets[0].data[valueX] + this.data.datasets[1].data[valueX]) / 2);
-            }
+            // let avgVal;
+            // if (this.data.datasets[0].data[valueX] && this.data.datasets[1].data[valueX]) {
+            //     avgVal = Math.floor((this.data.datasets[0].data[valueX] + this.data.datasets[1].data[valueX]) / 2);
+            // }
 
             // switch (valueX) {
             //     case 0:
@@ -161,7 +161,18 @@ export default function Chart(props) {
             console.log(e)
         },
         onDrag: (e, datasetIndex, index, value) => {
-            e.target.style.cursor = 'grabbing'
+            e.target.style.cursor = 'grabbing';
+
+            if (datasetIndex === 1) {
+                const leftEarArray = props.leftEarDecibels;
+                leftEarArray.splice(index, 1, value);
+                props.setLeftEarDecibels(leftEarArray);
+            } else {
+                const rightEarArray = props.rightEarDecibels;
+                rightEarArray.splice(index, 1, value);
+                props.setRightEarDecibels(rightEarArray);
+            }
+
 
             //CAPTURE VALUE OF DRAGGED ELEMENT, INJECT IT INTO THE SLIDERS
 
@@ -224,6 +235,8 @@ export default function Chart(props) {
         onDragEnd: function (e, datasetIndex, index, value) {
             e.target.style.cursor = 'default'
             console.log(datasetIndex, index, value)
+
+
             // console.log(value);
         },
         hover: {
@@ -238,12 +251,29 @@ export default function Chart(props) {
     return (
         <div className="Chart">
             <Row>
-                <Col sm={1}></Col>
-                <Col sm={10}>
-                    <Line data={chartData} options={chartOptions} />
+                <Col sm={1}>
+                    <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide' : 'Show'}</Button>
                 </Col>
-                <Col sm={1}></Col>
+                <Col sm={11}>
+                {!showState ? <h2>&lt;----- Click this button to open your eye chart!</h2> : null}
+                </Col>
             </Row>
+            {showState ? (
+                <Row>
+                    <Col sm={1}></Col>
+                    <Col sm={10}>
+                        <Line data={chartData} options={chartOptions} />
+                    </Col>
+                    <Col sm={12} className='d-flex justify-content-around'></Col>
+                    <span>Current Ear: </span>
+                    {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">Right Ear</Button>:<Button onClick={() => setEarState(!earState)} variant="primary">Left Ear</Button>}
+                    <span>&lt;----- Click this button to toggle ear data being added</span>
+                </Row>
+            ) : (
+                    null
+                )}
+
+
         </div>
     )
 }

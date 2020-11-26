@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Jumbotron, Col, Row, Container } from 'react-bootstrap'
 import Chart from './components/Chart';
 import MainPage from './pages/MainPage';
+import Login from './pages/Login';
 
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
             </Route>
             <Route exact path="/chart">
               <Chart />
+            </Route>
+            <Route exact path="/login">
+              <Login />
             </Route>
             <Route exact path="*">
               <h1>404 not found</h1>
