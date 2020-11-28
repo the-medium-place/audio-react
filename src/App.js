@@ -2,8 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Jumbotron, Col, Row, Container } from 'react-bootstrap'
 import Chart from './components/Chart';
-import MainPage from './pages/MainPage';
+import MainPage from './pages/UserPage';
 import Login from './pages/Login';
+import UserPage from './pages/UserPage';
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
             </Route>
             <Route exact path="/login">
               <Login />
+            </Route>
+            <Route exact patt="/userpage">
+              <UserPage />
             </Route>
             <Route exact path="*">
               <h1>404 not found</h1>

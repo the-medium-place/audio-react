@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Col, Row, Button } from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
-// import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
+import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
 
 
 
@@ -75,13 +75,13 @@ export default function Chart(props) {
                 }
             }
 
-            // IF earClick IS true, SET POINTS FOR RIGHT EAR, ELSE SET POINTS FOR LEFT EAR
-            if (earState === true) {
+            // IF earState IS true, SET POINTS FOR RIGHT EAR, ELSE SET POINTS FOR LEFT EAR
+            if (earState) {
                 const arrCopy = [...props.rightEarDecibels]
                 arrCopy.splice(valueX, 1, Math.floor(valueY))
                 props.setRightEarDecibels(arrCopy);
                 // console.log(props.rightEarDecibels);
-            } else if (earState === false) {
+            } else if (!earState) {
                 const arrCopy = [...props.leftEarDecibels]
                 arrCopy.splice(valueX, 1, Math.floor(valueY))
                 props.setLeftEarDecibels(arrCopy);
@@ -248,6 +248,7 @@ export default function Chart(props) {
         }
     }
 
+
     return (
         <div className="Chart">
             <Row>
@@ -273,7 +274,13 @@ export default function Chart(props) {
                     null
                 )}
 
-
+            <Row>
+                <Col>
+                    <Button onClick={props.handleChartSave}>
+                        Save Values
+                    </Button>
+                </Col>
+            </Row>
         </div>
     )
 }
