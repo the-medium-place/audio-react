@@ -19,7 +19,7 @@ export default function Login() {
                     </Button>
                 </Col>
             </Row>
-            {formState ? <LoginForm /> : <SignUpForm />}
+            {formState ? <LoginForm setformstate={setFormState}/> : <SignUpForm setformstate={setFormState} formstate={formState}/>}
             
         </div>
     )

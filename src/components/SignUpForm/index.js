@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button, Modal } from 'react-bootstrap';
 import API from '../../utils/API';
+import LoginForm from '../LoginForm';
 
-export default function SignUpForm() {
+export default function SignUpForm(props) {
     const history = useHistory()
 
     const [userState, setUserState] = useState({
@@ -11,7 +12,11 @@ export default function SignUpForm() {
         email: '',
         password: ''
     })
-    const [passConfState, setPassConfState] = useState('')  
+    const [passConfState, setPassConfState] = useState('')
+
+    const [modalShow, setModalShow] = useState(false);
+
+    const toggleModal = () => setModalShow(!modalShow);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -21,13 +26,21 @@ export default function SignUpForm() {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         API.createUser(userState)
-        .then(res => {
-            console.log(res)
-            history.push('/home')
+            .then(res => {
+                console.log(res)
+                setUserState({
+                    username: '',
+                    email: '',
+                    password: ''
+                })
+                setPassConfState('')
+                setModalShow(true)
+                // props.setFormState(!props.formState)
 
-        })
-        .catch(err => console.log(err))
+            })
+            .catch(err => console.log(err))
 
+        history.push('/')
     }
 
     return (
@@ -72,7 +85,22 @@ export default function SignUpForm() {
                         </Button>
                     </Form>
                 </Col>
-                <Col></Col>
+                <Modal show={modalShow} onHide={toggleModal} size="lg">
+                    <Modal.Header closeButton>
+                        <Modal.Title>Login!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <LoginForm />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {/* <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button> */}
+                        {/* <Button variant="primary" onClick={toggleModal}>
+                            Save Changes
+                    </Button>*/}
+                    </Modal.Footer> 
+                </Modal>
             </Row>
         </div>
     )
