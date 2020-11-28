@@ -17,14 +17,11 @@ function App() {
         </Jumbotron>
         <Container>
           <Switch>
-            <Route exact path={['/', '/home']}>
-              <MainPage />
+            <Route exact path={['/', '/home', '/login']}>
+              <Login />
             </Route>
             <Route exact path="/chart">
               <Chart />
-            </Route>
-            <Route exact path="/login">
-              <Login />
             </Route>
             <Route exact patt="/userpage">
               <UserPage />

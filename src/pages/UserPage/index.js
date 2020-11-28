@@ -3,10 +3,13 @@ import Chart from '../../components/Chart';
 import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../../utils/API';
+import { useHistory } from 'react-router-dom';
 
 
 
 export default function UserPage() {
+
+    const history = useHistory();
 
     const params = useParams();
 
@@ -22,7 +25,7 @@ export default function UserPage() {
 
     
 
-    useEffect(fetchUserData, [])
+    useEffect(fetchUserData, [history])
 
     function fetchUserData() {
         const token = localStorage.getItem('token');
@@ -30,9 +33,10 @@ export default function UserPage() {
 
         API.getProfile(token).then(profileData => {
             console.log("inside api function");
+            if(!profileData) history.push('/')
+        
             
             if (profileData) {
-                console.log("profileData: ", profileData)
                 setProfileState({
                     username: profileData.data.username,
                     email: profileData.data.email,
@@ -43,6 +47,9 @@ export default function UserPage() {
                 setLeftEarDecibels(JSON.parse(profileData.data.leftEar));
             }
         })
+        .catch(err => {
+            if(err.response) history.push('/')
+        })
     }
 
     function handleChartSave(){
@@ -52,6 +59,11 @@ export default function UserPage() {
             leftEar: JSON.stringify(leftEarDecibels)
         }
         API.updateEarVals(userId, updateObj)
+    }
+
+    function handleChartClear(){
+        setLeftEarDecibels([null, null, null, null, null, null, null])
+        setRightEarDecibels([null, null, null, null, null, null, null])
 
     }
 
@@ -60,16 +72,15 @@ export default function UserPage() {
 
     return (
         <div className="UserPage">
-            <Chart handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
+            <Row>
+                <Col sm={12}>
+                    <h1>Hello {profileState.username}! <small>Welcome Back!</small></h1>
+                </Col>
+            </Row>
+            <Chart handleChartClear={handleChartClear} handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
             <Row>
                 <Col sm={4}></Col>
                 <Col sm={4}>
-                    {/* <span>Click to set: </span>
-                    <Button
-                        onClick={() => setEarState(!earState)}
-                    >
-                        {earState ? 'Right Ear' : 'Left Ear'}
-                    </Button> */}
                 </Col>
                 <Col sm={4}></Col>
             </Row>

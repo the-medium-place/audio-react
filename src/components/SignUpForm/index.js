@@ -20,7 +20,6 @@ export default function SignUpForm() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(userState);
         API.createUser(userState)
         .then(res => {
             console.log(res)
@@ -29,10 +28,6 @@ export default function SignUpForm() {
         })
         .catch(err => console.log(err))
 
-    }
-
-    const checkFormVals = () => {
-        // return (formValState.usernameLength && formValState.emailValid && formValState.passwordLength && formValState.passwordConfirmMatch === userState.password)
     }
 
     return (

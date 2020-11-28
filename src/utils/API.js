@@ -19,7 +19,6 @@ const API = {
                 "authorization":`Bearer ${token}`
             }
         })
-        // .then(res => res.json()).catch(err => null)
     },
 
     updateEarVals: function(userId,updateObj) {

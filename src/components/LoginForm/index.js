@@ -26,7 +26,11 @@ export default function LoginForm() {
             localStorage.setItem('token', resToken.data.token)
             history.push('/userpage/')
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err.response)
+            if(err.response) alert(err.response.data + '\nStatus\n'+err.response.status)
+            // else if (err.response) alert
+        })
 
     }
 

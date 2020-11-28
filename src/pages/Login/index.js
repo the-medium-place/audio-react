@@ -5,14 +5,17 @@ import LoginForm from '../../components/LoginForm';
 
 export default function Login() {
 
-    const [formState, setFormState] = useState(false);
+    const [formState, setFormState] = useState(true);
 
     return (
         <div className="Login">
             <Row>
                 <Col xs={12} className="d-flex justify-content-center">
+                    {formState?<h1>Login!</h1>:<h1>Sign Up!</h1>}
+                </Col>
+                <Col xs={12} className="d-flex justify-content-center">
                     <Button onClick={()=>setFormState(!formState)}>
-                        {formState?"login":"sign up"}
+                        {!formState?"go to login form":"click here to sign up"}
                     </Button>
                 </Col>
             </Row>
