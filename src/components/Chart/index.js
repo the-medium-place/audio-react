@@ -256,33 +256,29 @@ export default function Chart(props) {
                     <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide ear chart' : 'Show ear chart'}</Button>
                 </Col>
                 <Col sm={9}>
-                {!showState ? <h2>&lt;----- Click this button to open your eye chart!</h2> : null}
+                    {!showState ? <h2>&lt;----- Click this button to open your eye chart!</h2> : null}
                 </Col>
             </Row>
-            {showState ? (
+            {showState ? (<>
                 <Row>
-                    <Col sm={1}></Col>
-                    <Col sm={10}>
+                    <Col sm={12}>
                         <Line data={chartData} options={chartOptions} />
                     </Col>
-                    <Col sm={12} className='d-flex justify-content-around'></Col>
-                    {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">Currently setting RIGHT ear</Button>:<Button onClick={() => setEarState(!earState)} variant="primary">Currently setting LEFT ear</Button>}
-                    <span>&lt;----- Click this button to toggle ear data being added</span>
-            <Col className="d-flex justify-content-end">
-                <Button onClick={props.handleChartClear} variant="warning">
-                    Clear chart
-                </Button>
-                <Button onClick={props.handleChartSave} variant="success">
-                    Save Values
-                </Button>
-            </Col>
                 </Row>
-
-            // <Row>
-        // {/* </Row> */}
-            ) : (
-                    null
-                )}
+                <Row>
+                    {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">Currently setting RIGHT ear</Button> : <Button onClick={() => setEarState(!earState)} variant="primary">Currently setting LEFT ear</Button>}
+                    <span>&lt;----- Click this button to toggle ear data being added</span>
+                    <Col className="d-flex justify-content-end">
+                        <Button onClick={props.handleChartClear} variant="warning">
+                            Clear chart
+                        </Button>
+                        <Button onClick={props.handleChartSave} variant="success">
+                            Save Values
+                        </Button>
+                    </Col>
+                </Row>
+            </>
+            ) : null}
 
         </div>
     )

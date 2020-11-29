@@ -3,7 +3,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import API from '../../utils/API';
 import { useHistory } from "react-router-dom";
 
-export default function LoginForm() {
+export default function LoginForm(props) {
     const history = useHistory();
 
     const [loginState, setLoginState] = useState({
