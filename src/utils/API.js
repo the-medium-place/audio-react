@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:8080';
-const API_URL = 'https://zgstowell-audiology-api.herokuapp.com';
+const API_URL = 'http://localhost:8080';
+// const API_URL = 'https://zgstowell-audiology-api.herokuapp.com';
 
 const API = {
 
@@ -23,6 +23,10 @@ const API = {
 
     updateEarVals: function(userId,updateObj) {
         return axios.put(API_URL+'/api/users/'+userId, updateObj)
+    },
+
+    saveRecording: function(audioObj, userId) {
+        return axios.post(API_URL+'/api/blobs/'+userId, audioObj)
     }
 
 

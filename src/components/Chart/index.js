@@ -7,7 +7,7 @@ import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
 
 export default function Chart(props) {
 
-    const [showState, setShowState] = useState(true);
+    const [showState, setShowState] = useState(false);
     const [earState, setEarState] = useState(false);
 
 

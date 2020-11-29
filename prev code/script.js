@@ -80,6 +80,9 @@ recBtn.on('click', () => {
 
                 // CREATE AUDIO OBJECT FROM CAPTURED BLOBS
                 audio = new Audio(audioURL);
+                console.log("audioBlob: ", audioBlob)
+                console.log("audioURL: ", audioURL)
+                console.log("audio: ", audio)
 
                 // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
                 const context = new AudioContext();

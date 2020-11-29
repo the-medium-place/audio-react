@@ -3,7 +3,6 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Jumbotron, Col, Row, Container, Button } from 'react-bootstrap'
 import Chart from './components/Chart';
-import MainPage from './pages/UserPage';
 import Login from './pages/Login';
 import UserPage from './pages/UserPage';
 import API from './utils/API';
@@ -18,6 +17,7 @@ function App() {
     username: '',
     email: '',
     id: '',
+    audioBlobs: []
 })
 const [rightEarDecibels, setRightEarDecibels] = useState([null, null, null, null, null, null, null]);
 const [leftEarDecibels, setLeftEarDecibels] = useState([null, null, null, null, null, null, null]);
@@ -59,6 +59,7 @@ function logOutHandler(){
     username: '',
     email: '',
     id: '',
+    audioBlobs: []
   })
   setLeftEarDecibels([null, null, null, null, null, null, null]);
   setRightEarDecibels([null, null, null, null, null, null, null]);

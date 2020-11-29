@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Chart from '../../components/Chart';
-import { Row, Col, Toast } from 'react-bootstrap';
+import { Row, Col, Toast, Table } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../../utils/API';
 import { useHistory } from 'react-router-dom';
+import AudioTool from '../../components/AudioTool';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import RecordingList from '../../components/RecordingList';
 
 const toastSaveStyles = {
     position: 'fixed',
@@ -27,7 +31,7 @@ export default function UserPage(props) {
 
     const history = useHistory();
 
-    const params = useParams();
+    // const params = useParams();
 
 
     // const [profileState, setProfileState] = useState({
@@ -57,10 +61,12 @@ export default function UserPage(props) {
 
 
             if (profileData) {
+                console.log(profileData)
                 setProfileState({
                     username: profileData.data.username,
                     email: profileData.data.email,
-                    id: profileData.data.id
+                    id: profileData.data.id,
+                    audioBlobs: profileData.data.AudioBlobs
                 })
 
                 setRightEarDecibels(JSON.parse(profileData.data.rightEar));
@@ -92,7 +98,7 @@ export default function UserPage(props) {
         setLeftEarDecibels([null, null, null, null, null, null, null])
         setRightEarDecibels([null, null, null, null, null, null, null])
         setToastClearShow(true);
-    }   
+    }
 
 
 
@@ -104,17 +110,55 @@ export default function UserPage(props) {
                     <h1>Hello {profileState.username}! <small>Welcome Back!</small></h1>
                 </Col>
             </Row>
+            {/* EAR CHART COMPONENT */}
             <Chart handleChartClear={handleChartClear} handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
+
+            {/* AUDIO RECORDING COMPONENT */}
+            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} />
+
+            {/* LIST OF USER RECORDINGS */}
             <Row>
-                <Col sm={4}></Col>
-                <Col sm={4}>
+                <Col xs={10}>
+
+                    <Table striped bordered hover variang="dark"  style={{maxWidth: '85vw'}}>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Recording Name</th>
+                                <th>Blob String</th>
+                                <th>Player</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {profileState.audioBlobs.map((blob, i) => {
+                                return (
+                                    <RecordingList key={blob.id} blob={blob} i={i}/>
+                                    // <tr key={blob.id}>
+                                    //     <td>{i + 1}</td>
+                                    //     <td>{blob.recordingName}</td>
+                                    //     <td>{blob.blobString}</td>
+                                    //     {/* {console.log(JSON.parse(blob.blobString))} */}
+                                    //     <td>
+                                    //         <AudioPlayer
+                                    //             src={JSON.parse(blob.blobString)["blobURL"]}
+                                    //             onPlay={()=>console.log('play audio')}
+                                    //         />
+                                    //     </td>
+                                    // </tr>
+                                )
+                            })}
+                        </tbody>
+
+                    </Table>
                 </Col>
-                <Col sm={4}></Col>
             </Row>
+            
+            {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>
                 <Toast.Header>
                     <strong className="mr-auto">
-                    Success! Your settings have been saved for your next visit!
+                        Success! Your settings have been saved for your next visit!
                     </strong>
                 </Toast.Header>
                 {/* <Toast.Body>
