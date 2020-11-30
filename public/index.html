@@ -44,7 +44,31 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 
-
+<!-- load OpusMediaRecorder.umd.js. OpusMediaRecorder will be loaded. -->
+<script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OpusMediaRecorder.umd.js"></script>
+<!-- load encoderWorker.umd.js. This should be after OpusMediaRecorder. -->
+<!-- This script tag will create OpusMediaRecorder.encoderWorker. -->
+<script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/encoderWorker.umd.js"></script>
+ 
+<script>
+// ...
+// If you already load encoderWorker.js using <script> tag,
+// you don't need to define encoderWorkerFactory.
+// const workerOptions = {
+//   OggOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OggOpusEncoder.wasm',
+//   WebMOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/WebMOpusEncoder.wasm'
+// };
+ 
+// // Check if MediaRecorder available.
+// if (!window.MediaRecorder) {
+//   window.MediaRecorder = OpusMediaRecorder;
+// }
+// // Check if a target format (e.g. audio/ogg) is supported.
+// else if (!window.MediaRecorder.isTypeSupported('audio/wav')) {
+//   window.MediaRecorder = OpusMediaRecorder;
+// }
+// ...
+</script>
 </body>
 
 </html>

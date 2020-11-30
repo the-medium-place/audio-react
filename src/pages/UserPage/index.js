@@ -100,7 +100,10 @@ export default function UserPage(props) {
         setToastClearShow(true);
     }
 
-
+    function deleteRecording(blobId) {
+        API.deleteRecording(blobId)
+        fetchUserData()
+    }
 
 
     return (
@@ -114,13 +117,14 @@ export default function UserPage(props) {
             <Chart handleChartClear={handleChartClear} handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
 
             {/* AUDIO RECORDING COMPONENT */}
-            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} />
+            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} fetchUserData={fetchUserData}/>
 
             {/* LIST OF USER RECORDINGS */}
             <Row>
-                <Col xs={10}>
+                <Col xs={12}>
 
-                    <Table striped bordered hover variang="dark"  style={{maxWidth: '85vw'}}>
+
+                    <Table striped bordered hover variang="dark" >
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -130,30 +134,16 @@ export default function UserPage(props) {
                             </tr>
                         </thead>
                         <tbody>
-
-                            {profileState.audioBlobs.map((blob, i) => {
+                            {profileState.audioBlobs.length > 0 ? profileState.audioBlobs.map((blob, i) => {
                                 return (
-                                    <RecordingList key={blob.id} blob={blob} i={i}/>
-                                    // <tr key={blob.id}>
-                                    //     <td>{i + 1}</td>
-                                    //     <td>{blob.recordingName}</td>
-                                    //     <td>{blob.blobString}</td>
-                                    //     {/* {console.log(JSON.parse(blob.blobString))} */}
-                                    //     <td>
-                                    //         <AudioPlayer
-                                    //             src={JSON.parse(blob.blobString)["blobURL"]}
-                                    //             onPlay={()=>console.log('play audio')}
-                                    //         />
-                                    //     </td>
-                                    // </tr>
+                                    <RecordingList key={blob.id} blob={blob} i={i} deleteRecording={deleteRecording} />
                                 )
-                            })}
+                            }) : null}
                         </tbody>
-
                     </Table>
                 </Col>
             </Row>
-            
+
             {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>
                 <Toast.Header>

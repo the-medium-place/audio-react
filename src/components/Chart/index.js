@@ -250,13 +250,13 @@ export default function Chart(props) {
 
 
     return (
-        <div className="Chart">
+        <div className="Chart" style={{border:'1px solid black', margin: '1rem 0'}}>
             <Row>
                 <Col sm={3}>
                     <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide ear chart' : 'Show ear chart'}</Button>
                 </Col>
                 <Col sm={9}>
-                    {!showState ? <h2>&lt;----- Click this button to open your eye chart!</h2> : null}
+                    {!showState ? <h2>&lt;----- Click this button to open your ear chart!</h2> : null}
                 </Col>
             </Row>
             {showState ? (<>

@@ -27,9 +27,11 @@ const API = {
 
     saveRecording: function(audioObj, userId) {
         return axios.post(API_URL+'/api/blobs/'+userId, audioObj)
+    },
+
+    deleteRecording: function(blobId) {
+        return axios.delete(API_URL+'/api/blobs/delete/'+blobId)
     }
-
-
 }
 
 export default API;

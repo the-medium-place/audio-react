@@ -46,7 +46,6 @@ export default function SignUpForm(props) {
     return (
         <div className="SignUpform">
             <Row className="d-flex justify-content-center">
-                <Col></Col>
                 <Col xs={10}>
                     <Form onSubmit={handleFormSubmit}>
                         <Form.Group controlId="formBasicUsername">

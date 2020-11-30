@@ -2,7 +2,7 @@ import React from 'react'
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
-export default function RecordingList({ blob, i }) {
+export default function RecordingList(props) {
     
 
     // function onPlay(){
@@ -10,22 +10,29 @@ export default function RecordingList({ blob, i }) {
     //     tmp.play()
     // }
 
-    console.log(JSON.parse(blob.blobString));
+    console.log((props.blob.blobObject));
+
+    function handleDelete () {
+        props.deleteRecording(props.blob.id);
+    }
 
     return (
-            <tr key={blob.id} className="RecordingList">
-                <td>{i + 1}</td>
-                <td>{blob.recordingName}</td>
+            <tr key={props.blob.id} className="RecordingList">
+                <td>{props.i + 1}</td>
+                <td>{props.blob.recordingName}</td>
                 <td>
                     {/* time: {(audioBlob.stopTime - audioBlob.startTime)*1000} seconds */}
                 </td>
                 {/* {console.log(JSON.parse(blob.blobString))} */}
-                {/* <td>
+                <td>
                     <AudioPlayer
-                        // src={JSON.parse(blob.blobString)["blobURL"]}
-                        onPlay={onPlay}
+                        src={props.blob.blobObject.blobURL}
+                        // onPlay={onPlay}
                     />
-                </td> */}
+                </td>
+                <td>
+                    <button onClick={handleDelete}>delete</button>
+                </td>
             </tr>
     )
 }
