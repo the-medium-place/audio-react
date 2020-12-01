@@ -49,6 +49,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     // CAPTURE RAW AUDIO DATA INFO (BLOBS)
                     const audioBlobTemp = new Blob(audioChunks);
                     setAudioBlob(audioBlobTemp)
+                    console.log(audioBlob)
 
                     const audioURLTemp = URL.createObjectURL(audioBlobTemp);
                     console.log("audioURL: ", typeof audioURLTemp)
@@ -133,9 +134,9 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     </Row>
                     <Row>
                         <Col>
-                        <button onClick={recordAudio}>record</button>
-                        <button onClick={stopRecord}>sop record</button>
-                        <button onClick={playRecording}>play recording</button>
+                        <button id="record-btn">record</button>
+                        <button id="stop-btn">stop record</button>
+                        <button id="play-btn">play recording</button>
                             {/* <Button variant="primary" onClick={() => setRecordState(true)}>Record</Button> */}
                             {/* <Button variant="primary" disabled={!recordState} onClick={() => setPauseState(!pauseState)}>{pauseState?"Un-Pause Rec":"Pause Rec"}</Button> */}
                             {/* <Button variant="danger" onClick={() => setRecordState(false)}>Stop Recording</Button> */}
