@@ -1,10 +1,13 @@
-function recordAudio() {
+let mediaRecorder;
+let audioBlob;
+let audioURL;
+let audio;
 
-    // CAPTURE MICROPHONE INPUT
+function record() {
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
             // SET UP RECORDING WITH MICROPHONE
-            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder = new MediaRecorder(stream);
 
             // START RECORDING
             mediaRecorder.start();
@@ -16,6 +19,52 @@ function recordAudio() {
                 // PUSH ALL AUDIO CHUNKS TO SINGLE ARRAY
                 audioChunks.push(event.data)
             })
+        })
+}
+
+function stopRecord() {
+    // STOP RECORDING
+    mediaRecorder.stop();
+}
+
+function playRecording(){
+    audio.play();
+}
+
+mediaRecorder.addEventListener('stop', () => {
+    // CAPTURE RAW AUDIO DATA INFO (BLOBS)
+    audioBlob = new Blob(audioChunks);
+    audioURL = URL.createObjectURL(audioBlob);
+
+    // CREATE AUDIO OBJECT FROM CAPTURED BLOBS
+    audio = new Audio(audioURL);
+
+    // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
+    const context = new AudioContext();
+    const audioSource = context.createMediaElementSource(audio);
+    // setAudioSource(audioURL)
+
+})
+
+
+function recordAudio() {
+
+    // CAPTURE MICROPHONE INPUT
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            // // SET UP RECORDING WITH MICROPHONE
+            // mediaRecorder = new MediaRecorder(stream);
+
+            // // START RECORDING
+            // mediaRecorder.start();
+
+            // const audioChunks = [];
+
+            // // AUDIO IS CAPTURED IN MULTIPLE 'CHUNKS'
+            // mediaRecorder.addEventListener("dataavailable", event => {
+            //     // PUSH ALL AUDIO CHUNKS TO SINGLE ARRAY
+            //     audioChunks.push(event.data)
+            // })
 
             // USER CLICKS STOP BUTTON
             stopBtn.on('click', () => {
@@ -30,10 +79,10 @@ function recordAudio() {
                 // CAPTURE RAW AUDIO DATA INFO (BLOBS)
                 audioBlob = new Blob(audioChunks);
                 audioURL = URL.createObjectURL(audioBlob);
-                
+
                 // CREATE AUDIO OBJECT FROM CAPTURED BLOBS
                 audio = new Audio(audioURL);
-                
+
                 // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
                 const context = new AudioContext();
                 const audioSource = context.createMediaElementSource(audio);
@@ -113,46 +162,46 @@ function recordAudio() {
                     let hertz,
                         gainVal;
 
-                    switch (index){
+                    switch (index) {
                         case 0:
-                            hertz=125;
-                            gainVal=20;
+                            hertz = 125;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz125;
                             break;
 
                         case 1:
-                            hertz=250;
-                            gainVal=20;
+                            hertz = 250;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz250;
                             break;
-                
+
                         case 2:
-                            hertz=500;
-                            gainVal=20;
+                            hertz = 500;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz500;
                             break;
 
                         case 3:
-                            hertz=1000;
-                            gainVal=20;
+                            hertz = 1000;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz1000;
                             break;
 
                         case 4:
-                            hertz=2000;
-                            gainVal=20;
+                            hertz = 2000;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz2000;
                             break;
 
                         case 5:
-                            hertz=4000;
-                            gainVal=20;
+                            hertz = 4000;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz4000;
                             break;
 
                         default:
-                            hertz=8000;
-                            gainVal=20;
+                            hertz = 8000;
+                            gainVal = 20;
                             // gainVal=eqValsObj.hz8000;
                             break;
                     }
