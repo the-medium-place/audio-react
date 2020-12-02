@@ -58,8 +58,12 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
             {showState ?
                 <>
                     <Row className="mt-4">
-                        <Col className="d-flex justify-content-center">
+                        <Col sm={12} className="d-flex justify-content-center flex-column text-center">
                             <h1>Testing the audio tool!</h1>
+                            {/* <br/> */}
+                            <h4 className="p-2 m-3" style={{background: 'rgba(200, 0, 0, 0.4)'}}>Note: In order for the recorder to work, you must be viewing the site from secure connection.<br/> ** MAKE SURE THE WEBSITE URL SAYS 'https://' (with an 's' at the end)**</h4>
+                            {/* <br /> */}
+                            <h5 className="p-2 m-3" style={{background: 'rgba(200, 0, 0, 0.4)'}}>If you are on an iPhone, you MUST USE the native iOS Safari browser</h5>
                         </Col>
                     </Row>
                     <Row>
@@ -84,7 +88,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     </Row>
                     <Row>
                         <Col sm={12} className="d-flex justify-content-center mt-2">
-                <a id="download-link" href=""></a>
+                            <a id="download-link"></a>
                         </Col>
                     </Row>
                 </>

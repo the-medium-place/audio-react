@@ -37,7 +37,6 @@ rootDiv.on("click", "#create-btn", () => {
         .then(_ => console.log('Creating MediaRecorder is successful.'))
         .then(initButtons)
         .then(updateButtonState);
-
 })
 
 function createMediaRecorder(stream) {
@@ -191,7 +190,7 @@ window.addEventListener('load', function checkPlatform () {
     let tmpRec = new MediaRecorder(
       getStream(new Audio('https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3')),
       {}, workerOptions);
-    defaultMime.innerHTML = `default: ${tmpRec.mimeType} (Browser dependant)`;
+    defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
   }, false);
   
   rootDiv.on('click', '#play-btn', ()=> {
