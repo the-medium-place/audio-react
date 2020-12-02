@@ -22,8 +22,6 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
 
 
     const [showState, setShowState] = useState(false)
-    // let audioChunks;
-    // let mediaRecorder
 
     // function saveRecording() {
     //     console.log('save btn clicked');
@@ -72,38 +70,16 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                             <Button className="m-1" id="resume-btn" variant="warning">resume record</Button>
                             <Button className="m-1" id="stop-btn">stop record</Button>
                             <Button className="m-1" id="play-btn" variant="success">play recording</Button>
-                            {/* <Button variant="primary" onClick={() => setRecordState(true)}>Record</Button> */}
-                            {/* <Button variant="primary" disabled={!recordState} onClick={() => setPauseState(!pauseState)}>{pauseState?"Un-Pause Rec":"Pause Rec"}</Button> */}
-                            {/* <Button variant="danger" onClick={() => setRecordState(false)}>Stop Recording</Button> */}
-                            {/* <Button variant="success">Play recording</Button> */}
-                        </Col>
-                        {/* <Col>
-                            <h1>recordState: {JSON.stringify(recordState)}</h1>
-                        </Col> */}
+                         </Col>
                     </Row>
                     <Row>
                         <Col sm={12} className="d-flex justify-content-center">
                             <p id="status-text">mic tool</p>
-                            {/* <ReactMic
-                        record={recordState}
-                        pause={pauseState}
-                        className="sound-wave"
-                        onStop={onStop}
-                        onData={onData}
-                        strokeColor="#000000"
-                        backgroundColor="#666666"
-                        visualSetting="frequencyBars"
-                        mimeType="audio/wav"
-
-                    /> */}
                         </Col>
                     </Row>
                     <Row>
                         <Col sm={12} className="d-flex justify-content-center">
                             <audio id="audio-elem" controls ></audio>
-                            {/* <Button onClick={saveRecording}>
-                        Save Recording
-                    </Button> */}
                         </Col>
                     </Row>
                     <Row>
