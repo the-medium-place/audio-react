@@ -1,97 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, } from 'react-bootstrap';
 // import recordAudio from './audiotool';
-import { ReactMic } from 'react-mic';
+
+// import { ReactMic } from 'react-mic';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import API from '../../utils/API';
-
+// import API from '../../utils/API';
 
 
 export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileState, fetchUserData }) {
-    // console.log(rightEarDecibels, leftEarDecibels)
-    const [recordState, setRecordState] = useState(false);
-    // const [pauseState, setPauseState] = useState(false)
 
-    // const [audioSource, setAudioSource] = useState({
-    //     blobObject: null,
-    //     recordingName: '',
-    // });
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = "/assets/js/audiotool.js";
+        script.async = true;
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        }
+    }, []);
 
-    const [audioBlob, setAudioBlob] = useState(null);
-    const [audioURL, setAudioURL] = useState('');
-    const [audio, setAudio] = useState(null);
-    // const [mediaRecorder, setMediaRecorder] = useState(null);
-    // const [audioChunks, setAudioChunks] = useState([]);
 
     const [showState, setShowState] = useState(false)
-    let audioChunks;
-    let mediaRecorder
-
-    function recordAudio() {
-        navigator.mediaDevices.getUserMedia({ audio: true, type: 'audio/wav' })
-            .then(stream => {
-                // SET UP RECORDING WITH MICROPHONE
-                mediaRecorder = new MediaRecorder(stream);
-                // setMediaRecorder(new MediaRecorder(stream))
-    
-                // START RECORDING
-                mediaRecorder.start();
-    
-                audioChunks = [];
-    
-                // AUDIO IS CAPTURED IN MULTIPLE 'CHUNKS'
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    // PUSH ALL AUDIO CHUNKS TO SINGLE ARRAY
-                    audioChunks.push(event.data)
-                })
-                mediaRecorder.addEventListener('stop', () => {
-                    // CAPTURE RAW AUDIO DATA INFO (BLOBS)
-                    const audioBlobTemp = new Blob(audioChunks);
-                    setAudioBlob(audioBlobTemp)
-                    console.log(audioBlob)
-
-                    const audioURLTemp = URL.createObjectURL(audioBlobTemp);
-                    console.log("audioURL: ", typeof audioURLTemp)
-                    setAudioURL(audioURLTemp)
-                    console.log("audioURL state: ", audioURL)
-                
-                    // CREATE AUDIO OBJECT FROM CAPTURED BLOBS
-                    const audioTemp = new Audio(audioURLTemp);
-                    setAudio(audioTemp)
-                
-                    // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
-                    // const context = new AudioContext();
-                    // const audioSource = context.createMediaElementSource(audio);
-                    // setAudioSource(audioURL)
-                })
-            })
-    }
-
- 
-
-    function stopRecord() {
-        // STOP RECORDING
-        mediaRecorder.stop();
-    }
-    
-    function playRecording(){
-        audio.play();
-    }
-
-    // function onData(recordedBlob) {
-    //     console.log('chunk of real-time data is: ', recordedBlob);
-    // }
-
-    // function onStop(recordedBlob) {
-    //     console.log('recordedBlob is: ', recordedBlob);
-    //     setAudioSource({
-    //         blobObject: recordedBlob,
-    //         recordingName: 'my recording'
-    //     })
-    //     setAudioBlob(recordedBlob)
-    //     // const url = URL.createObjectURL(recordedBlob.blob)
-    // }
+    // let audioChunks;
+    // let mediaRecorder
 
     // function saveRecording() {
     //     console.log('save btn clicked');
@@ -108,11 +40,6 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
     //     fetchUserData();
     // }
 
-    // function onPlay(){
-    //     console.log('playing')
-    //     // console.log(audioBlob);
-    // }
-    // console.log(profileState);
 
 
     return (
@@ -122,7 +49,12 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide Audio Tool' : 'Show AudioTool'}</Button>
                 </Col>
                 <Col sm={9}>
-                    {!showState ? <h2>&lt;----- Click to open your audio recorder!</h2> : null}
+                    {!showState ? <>
+                        <h2>&lt;----- Click to open your audio recorder!</h2>
+                        <br />
+                        <p id="defaultMime"></p>
+                    </>
+                        : null}
                 </Col>
             </Row>
             {showState ?
@@ -134,21 +66,24 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     </Row>
                     <Row>
                         <Col>
-                        <button id="record-btn">record</button>
-                        <button id="stop-btn">stop record</button>
-                        <button id="play-btn">play recording</button>
+                            <Button className="m-1" id="create-btn" variant="dark">create object</Button>
+                            <Button className="m-1" id="record-btn" variant="danger">record</Button>
+                            <Button className="m-1" id="pause-btn" variant="warning">pause record</Button>
+                            <Button className="m-1" id="resume-btn" variant="warning">resume record</Button>
+                            <Button className="m-1" id="stop-btn">stop record</Button>
+                            <Button className="m-1" id="play-btn" variant="success">play recording</Button>
                             {/* <Button variant="primary" onClick={() => setRecordState(true)}>Record</Button> */}
                             {/* <Button variant="primary" disabled={!recordState} onClick={() => setPauseState(!pauseState)}>{pauseState?"Un-Pause Rec":"Pause Rec"}</Button> */}
                             {/* <Button variant="danger" onClick={() => setRecordState(false)}>Stop Recording</Button> */}
                             {/* <Button variant="success">Play recording</Button> */}
                         </Col>
-                        <Col>
+                        {/* <Col>
                             <h1>recordState: {JSON.stringify(recordState)}</h1>
-                        </Col>
+                        </Col> */}
                     </Row>
                     <Row>
                         <Col sm={12} className="d-flex justify-content-center">
-                            <p>mic tool</p>
+                            <p id="status-text">mic tool</p>
                             {/* <ReactMic
                         record={recordState}
                         pause={pauseState}
@@ -164,20 +99,17 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
+                        <Col sm={12} className="d-flex justify-content-center">
+                            <audio id="audio-elem" controls ></audio>
                             {/* <Button onClick={saveRecording}>
                         Save Recording
                     </Button> */}
                         </Col>
                     </Row>
                     <Row>
-                        {audioBlob ? (
-                            <AudioPlayer
-                            src={audioURL}
-                            // onPlay={onPlay}
-                            />
-                        ) : null
-                        }
+                        <Col sm={12} className="d-flex justify-content-center mt-2">
+                <a id="download-link" href=""></a>
+                        </Col>
                     </Row>
                 </>
                 : null}
