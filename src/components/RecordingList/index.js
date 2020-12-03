@@ -5,30 +5,24 @@ import 'react-h5-audio-player/lib/styles.css';
 export default function RecordingList(props) {
     
 
-    // function onPlay(){
-    //     const tmp = new Audio(JSON.parse(blob.blobString)["blobURL"]);
-    //     tmp.play()
-    // }
-
-    console.log((props.blob.blobObject));
+    console.log((props.recording.audioURL));
 
     function handleDelete () {
-        props.deleteRecording(props.blob.id);
+        props.deleteRecording(props.recording.id);
     }
 
     return (
-            <tr key={props.blob.id} className="RecordingList">
+            <tr key={props.recording.id} className="RecordingList">
                 <td>{props.i + 1}</td>
-                <td>{props.blob.recordingName}</td>
-                <td>
-                    {/* time: {(audioBlob.stopTime - audioBlob.startTime)*1000} seconds */}
-                </td>
+                <td>{props.recording.recordingName}</td>
+
                 {/* {console.log(JSON.parse(blob.blobString))} */}
                 <td>
                     <AudioPlayer
-                        src={props.blob.blobObject.blobURL}
+                        src={props.recording.audioURL}
                         // onPlay={onPlay}
                     />
+                    {/* <audio src={props.recording.audioURL} controls></audio> */}
                 </td>
                 <td>
                     <button onClick={handleDelete}>delete</button>

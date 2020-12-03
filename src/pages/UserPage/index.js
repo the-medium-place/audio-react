@@ -129,14 +129,14 @@ export default function UserPage(props) {
                             <tr>
                                 <th>#</th>
                                 <th>Recording Name</th>
-                                <th>Blob String</th>
-                                <th>Player</th>
+                                <th>Audio Player</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {profileState.audioBlobs.length > 0 ? profileState.audioBlobs.map((blob, i) => {
+                            {profileState.audioBlobs.length > 0 ? profileState.audioBlobs.map((recording, i) => {
                                 return (
-                                    <RecordingList key={blob.id} blob={blob} i={i} deleteRecording={deleteRecording} />
+                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
                                 )
                             }) : null}
                         </tbody>

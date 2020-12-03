@@ -11,6 +11,10 @@ const rootDiv = $("#root")
 // MediaRecorder object
 let mediaRecorder;
 
+// Global variable to hold audio object for React State
+let audioFile;
+let testVariable = 'this is a test';
+
 // space for audio element created from recording (for in-site playback)
 // utilized in play-btn click listener
 let audioEl;
@@ -72,6 +76,8 @@ function createMediaRecorder(stream) {
         let extension = '.wav'
         link.download = 'recording' + extension;
         audioElement.src = audioURL;
+        // testing to save the audio blob for saving?
+        window.audioFile = blob;
         console.log(audioElement.attributes.src)
 
         console.log('Recorder stopped');
@@ -193,7 +199,7 @@ window.addEventListener('load', function checkPlatform () {
     defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
   }, false);
   
-  rootDiv.on('click', '#play-btn', ()=> {
+rootDiv.on('click', '#play-btn', ()=> {
       audioEl.play();
   })
 
