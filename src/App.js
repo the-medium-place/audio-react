@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Jumbotron, Col, Row, Container, Button } from 'react-bootstrap'
+import { Jumbotron, Col, Row, Container, Button, Navbar, Nav, DropdownButton, Dropdown, NavDropdown } from 'react-bootstrap'
 import Chart from './components/Chart';
 import Login from './pages/Login';
 import UserPage from './pages/UserPage';
 import API from './utils/API';
 import { useHistory } from 'react-router-dom';
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
 
 function App() {
@@ -70,13 +71,26 @@ function logOutHandler(){
 
 
   return (
-    <div>
+    <div className="App">
       <Router>
-        <Jumbotron>
-          <h1> Setting up Audio React </h1>
-          <p className="lead">{profileState.username?profileState.username:'Hello there!'}</p>
-          {profileState.username?<Button onClick={logOutHandler}>Log Out</Button>:null}
-        </Jumbotron>
+        {/* <Jumbotron className="bg-dark text-light"> */}
+        <Navbar variant="dark" bg="dark" className="justify-content-between">
+          <Navbar.Brand>
+            Audio App
+          </Navbar.Brand>
+          <Nav>
+          <Nav.Item>
+            <NavDropdown variant="dark" title={profileState.username ? profileState.username : 'Welcome!'}>
+              <NavDropdown.Item>About Us</NavDropdown.Item>
+              {profileState.username ? (<NavDropdown.Item onClick={logOutHandler}>Log Out</NavDropdown.Item>): null}
+              </NavDropdown>
+          </Nav.Item>
+          </Nav>
+          {/* <h1> Setting up Audio React </h1> */}
+          {/* <p className="lead">{profileState.username?profileState.username:'Hello there!'}</p> */}
+          {/* {profileState.username?<Button onClick={logOutHandler}>Log Out</Button>:null} */}
+        {/* </Jumbotron> */}
+        </Navbar>
         <Container>
           <Switch>
             <Route exact path={['/', '/home', '/login']}>

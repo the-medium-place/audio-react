@@ -108,7 +108,7 @@ export default function UserPage(props) {
 
     return (
         <div className="UserPage">
-            <Row>
+            <Row className="my-5">
                 <Col sm={12}>
                     <h1>Hello {profileState.username}! <small>Welcome Back!</small></h1>
                 </Col>
@@ -117,32 +117,33 @@ export default function UserPage(props) {
             <Chart handleChartClear={handleChartClear} handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
 
             {/* AUDIO RECORDING COMPONENT */}
-            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} fetchUserData={fetchUserData}/>
+            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} fetchUserData={fetchUserData} />
 
             {/* LIST OF USER RECORDINGS */}
-            <Row>
-                <Col xs={12}>
-
-
-                    <Table striped bordered hover variang="dark" >
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Recording Name</th>
-                                <th>Audio Player</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {profileState.audioBlobs.length > 0 ? profileState.audioBlobs.map((recording, i) => {
-                                return (
-                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
-                                )
-                            }) : null}
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
+            {console.log(profileState.audioBlobs.length)}
+            {profileState.audioBlobs.length > 0 ? (
+                <Row className="d-flex justify-content-center">
+                    <Col md={12} lg={10}>
+                        <Table striped bordered hover variant="dark" >
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Recording Name</th>
+                                    <th>Audio Player</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {profileState.audioBlobs.map((recording, i) => {
+                                    return (
+                                        <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
+                                    )
+                                })}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            ) : null}
 
             {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>

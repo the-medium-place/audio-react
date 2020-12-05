@@ -250,31 +250,41 @@ export default function Chart(props) {
 
 
     return (
-        <div className="Chart" style={{border:'1px solid black', margin: '1rem 0'}}>
+        <div className="Chart mb-3">
             <Row>
-                <Col sm={3}>
+                <Col className="d-flex justify-content-center">
                     <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide ear chart' : 'Show ear chart'}</Button>
-                </Col>
-                <Col sm={9}>
-                    {!showState ? <h2>&lt;----- Click this button to open your ear chart!</h2> : null}
                 </Col>
             </Row>
             {showState ? (<>
+            <Row className="mt-3">
+                <Col>
+                    <p>
+                        Welcome to the Ear Chart! You should have received a chart that looks very similar to the one below from your audiologist. All you have to do is make our chart look like yours! Clicks the 'Ear Setting' button below to toggle between adding <span className="text-danger">Right-Ear</span>or <span className="text-primary">Left-Ear</span> datapoints. Then you can drag the points into place! Save with the 'Save' button, or click 'Clear' to start over with a fresh chart!
+                    </p>
+                </Col>
+            </Row>
                 <Row>
-                    <Col sm={12}>
+                    <Col sm={12} className="rounded shadow p-3">
                         <Line data={chartData} options={chartOptions} />
                     </Col>
                 </Row>
-                <Row>
-                    {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">Currently setting RIGHT ear</Button> : <Button onClick={() => setEarState(!earState)} variant="primary">Currently setting LEFT ear</Button>}
-                    <span>&lt;----- Click this button to toggle ear data being added</span>
+                <Row className="mt-3">
+                    <Col>
+                    <div className="d-flex rounded border p-1 pt-2 text-center justify-content-center bg-secondary text-light">
+
+                        <h5>Currently setting {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">RIGHT</Button> : <Button onClick={() => setEarState(!earState)} variant="primary">LEFT</Button>} ear</h5>
+                    </div>
+                    </Col>
                     <Col className="d-flex justify-content-end">
-                        <Button onClick={props.handleChartClear} variant="warning">
+                        <div className="p-3">
+                        <Button onClick={props.handleChartClear} variant="warning" className="m-1">
                             Clear chart
                         </Button>
-                        <Button onClick={props.handleChartSave} variant="success">
+                        <Button onClick={props.handleChartSave} variant="success" className="m-1">
                             Save Values
                         </Button>
+                        </div>
                     </Col>
                 </Row>
             </>

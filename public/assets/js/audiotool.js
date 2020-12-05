@@ -13,7 +13,6 @@ let mediaRecorder;
 
 // Global variable to hold audio object for React State
 let audioFile;
-let testVariable = 'this is a test';
 
 // space for audio element created from recording (for in-site playback)
 // utilized in play-btn click listener
@@ -70,14 +69,13 @@ function createMediaRecorder(stream) {
         dataChunks = [];
         let audioURL = URL.createObjectURL(blob);
         audioEl = new Audio(audioURL)
-        // player.src = audioURL;
         link.href = audioURL;
-        link.innerHTML="<button class='btn btn-primary'>download!</button>"
-        let extension = '.wav'
-        link.download = 'recording' + extension;
+        link.innerHTML="<button class='btn btn-dark'>Download</button>"
         audioElement.src = audioURL;
-        // testing to save the audio blob for saving?
+
+        // set audio data to global var for access in react app
         window.audioFile = blob;
+
         console.log(audioElement.attributes.src)
 
         console.log('Recorder stopped');
@@ -85,7 +83,7 @@ function createMediaRecorder(stream) {
     };
     mediaRecorder.onpause = () => console.log('Recorder paused');
     mediaRecorder.onresume = () => console.log('Recorder resumed');
-    mediaRecorder.onerror = e => console.log('Recorder encounters error:' + e.message);
+    mediaRecorder.onerror = err => console.log('Recorder encounters error:' + err.message);
 
     return stream;
 };
@@ -129,7 +127,7 @@ function updateButtonState() {
             // buttonStopTracks.disabled = false; // For debugging purpose
             status.innerHTML =
                 link.href ? 'Recording complete. You can play or download the recording below.'
-                    : 'Stream created. Click "start" button to start recording.';
+                    : 'Stream created. Click the <span class="bg-danger text-light p-1"><i class="fas fa-circle"></i></span> button to start recording.';
             break;
         case 'recording':
             buttonCreate.disabled = true;
@@ -138,7 +136,7 @@ function updateButtonState() {
             buttonResume.disabled = false;
             buttonStop.disabled = false;
             // buttonStopTracks.disabled = false; // For debugging purpose
-            status.innerHTML = 'Recording. Click "stop" button to play recording.';
+            status.innerHTML = 'Recording. Click <span class="bg-dark text-light p-1"><i class="fas fa-square"></i></span> button to play recording.';
             break;
         case 'paused':
             buttonCreate.disabled = true;
@@ -179,29 +177,26 @@ window.addEventListener('load', function checkPlatform () {
   
     // Check default MIME audio format for the client's platform
     // To do this, create captureStream() polyfill.
-    function getStream (mediaElement) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const context = new AudioContext();
-      const source = context.createMediaElementSource(mediaElement);
-      const destination = context.createMediaStreamDestination();
+    // function getStream (mediaElement) {
+    //   const AudioContext = window.AudioContext || window.webkitAudioContext;
+    //   const context = new AudioContext();
+    //   const source = context.createMediaElementSource(mediaElement);
+    //   const destination = context.createMediaStreamDestination();
   
-      source.connect(destination);
-      source.connect(context.destination);
+    //   source.connect(destination);
+    //   source.connect(context.destination);
   
-      return destination.stream;
-    }
-    const defaultMime = document.getElementById('defaultMime')
+    //   return destination.stream;
+    // }
+    // const defaultMime = document.getElementById('defaultMime')
     // When creating MediaRecorder object without mimeType option, the API will
     //  decide the default MIME Type depending on the browser running.
-    let tmpRec = new MediaRecorder(
-      getStream(new Audio('https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3')),
-      {}, workerOptions);
-    defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
+    // let tmpRec = new MediaRecorder(
+    //   getStream(new Audio('https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3')),
+    //   {}, workerOptions);
+    // defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
   }, false);
   
-rootDiv.on('click', '#play-btn', ()=> {
-      audioEl.play();
-  })
 
 
 
