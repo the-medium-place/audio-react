@@ -19,79 +19,76 @@ function App() {
     email: '',
     id: '',
     audioBlobs: []
-})
-const [rightEarDecibels, setRightEarDecibels] = useState([null, null, null, null, null, null, null]);
-const [leftEarDecibels, setLeftEarDecibels] = useState([null, null, null, null, null, null, null]);
-
-// useEffect(fetchUserData, [])
-
-// function fetchUserData() {
-//     const token = localStorage.getItem('token');
-//     // console.log("token: ", token)
-
-//     API.getProfile(token).then(profileData => {
-//         console.log("inside api function");
-//         // if(!profileData) history.push('/')
-    
-        
-//         if (profileData) {
-//             setProfileState({
-//                 username: profileData.data.username,
-//                 email: profileData.data.email,
-//                 id: profileData.data.id
-//             })
-            
-//             setRightEarDecibels(JSON.parse(profileData.data.rightEar));
-//             setLeftEarDecibels(JSON.parse(profileData.data.leftEar));
-//         }
-//     })
-//     .catch(err => {
-//         // if(err.response) history.push('/')
-//         if(err.response) {
-//           console.log(err.response)
-//           // alert(err.response.data);
-//           // window.location.href="/"
-//         }
-//     })
-// }
-
-function logOutHandler(){
-  setProfileState({
-    username: '',
-    email: '',
-    id: '',
-    audioBlobs: []
   })
-  setLeftEarDecibels([null, null, null, null, null, null, null]);
-  setRightEarDecibels([null, null, null, null, null, null, null]);
-  localStorage.clear()
-  window.location.href="/";
-}
+  const [rightEarDecibels, setRightEarDecibels] = useState([null, null, null, null, null, null, null]);
+  const [leftEarDecibels, setLeftEarDecibels] = useState([null, null, null, null, null, null, null]);
+
+  // useEffect(fetchUserData, [])
+
+  // function fetchUserData() {
+  //     const token = localStorage.getItem('token');
+  //     // console.log("token: ", token)
+
+  //     API.getProfile(token).then(profileData => {
+  //         console.log("inside api function");
+  //         // if(!profileData) history.push('/')
+
+
+  //         if (profileData) {
+  //             setProfileState({
+  //                 username: profileData.data.username,
+  //                 email: profileData.data.email,
+  //                 id: profileData.data.id
+  //             })
+
+  //             setRightEarDecibels(JSON.parse(profileData.data.rightEar));
+  //             setLeftEarDecibels(JSON.parse(profileData.data.leftEar));
+  //         }
+  //     })
+  //     .catch(err => {
+  //         // if(err.response) history.push('/')
+  //         if(err.response) {
+  //           console.log(err.response)
+  //           // alert(err.response.data);
+  //           // window.location.href="/"
+  //         }
+  //     })
+  // }
+
+  function logOutHandler() {
+    setProfileState({
+      username: '',
+      email: '',
+      id: '',
+      audioBlobs: []
+    })
+    setLeftEarDecibels([null, null, null, null, null, null, null]);
+    setRightEarDecibels([null, null, null, null, null, null, null]);
+    localStorage.clear()
+    window.location.href = "/";
+  }
 
 
 
   return (
     <div className="App">
       <Router>
-        {/* <Jumbotron className="bg-dark text-light"> */}
-        <Navbar variant="dark" bg="dark" className="justify-content-between">
+        <Navbar variant="dark" bg="dark" className="justify-content-between shadow-lg">
           <Navbar.Brand>
             Audio App
           </Navbar.Brand>
           <Nav>
-          <Nav.Item>
-            <NavDropdown variant="dark" title={profileState.username ? profileState.username : 'Welcome!'}>
-              <NavDropdown.Item>About Us</NavDropdown.Item>
-              {profileState.username ? (<NavDropdown.Item onClick={logOutHandler}>Log Out</NavDropdown.Item>): null}
+            <Nav.Item>
+              <NavDropdown variant="dark" title={profileState.username ? profileState.username : 'Welcome!'}>
+                <NavDropdown.Item>About Us</NavDropdown.Item>
+                {profileState.username ? (<NavDropdown.Item onClick={logOutHandler}>Log Out</NavDropdown.Item>) : null}
               </NavDropdown>
-          </Nav.Item>
+            </Nav.Item>
           </Nav>
-          {/* <h1> Setting up Audio React </h1> */}
-          {/* <p className="lead">{profileState.username?profileState.username:'Hello there!'}</p> */}
-          {/* {profileState.username?<Button onClick={logOutHandler}>Log Out</Button>:null} */}
-        {/* </Jumbotron> */}
         </Navbar>
         <Container>
+
+          {/* BEGIN ROUTING */}
           <Switch>
             <Route exact path={['/', '/home', '/login']}>
               <Login />
@@ -100,31 +97,31 @@ function logOutHandler(){
               <Chart />
             </Route>
             <Route exact patt="/userpage">
-              <UserPage 
-              profileState={profileState} 
-              setProfileState={setProfileState} 
-              leftEarDecibels={leftEarDecibels}
-              rightEarDecibels={rightEarDecibels}
-              setLeftEarDecibels={setLeftEarDecibels}
-              setRightEarDecibels={setRightEarDecibels}
+              <UserPage
+                profileState={profileState}
+                setProfileState={setProfileState}
+                leftEarDecibels={leftEarDecibels}
+                rightEarDecibels={rightEarDecibels}
+                setLeftEarDecibels={setLeftEarDecibels}
+                setRightEarDecibels={setRightEarDecibels}
               />
             </Route>
             <Route exact path="*">
               <h1>404 not found</h1>
             </Route>
           </Switch>
-        </Container>
-      </Router>
 
-      {/* <Jumbotron>
-        <h1> Setting up Audio React </h1>
-        <p className="lead">Testing some after text.</p>
-      </Jumbotron>
-      <Container>
-        <Row>
-          <h1>will be button to open ear chart modal</h1>
-        </Row>
-      </Container> */}
+        </Container>
+        <footer className="footer bg-dark text-light sticky-bottom">
+          <div className="d-flex justify-content-end align-items-end p-2 pr-4">
+            <a href="mailto:zgstowell@gmail.com" style={{color:'white'}}>
+              <span>
+                &copy; &lt;ZGS&gt; 2020
+              </span>
+            </a>
+          </div>
+        </footer>
+      </Router>
     </div>
   );
 }

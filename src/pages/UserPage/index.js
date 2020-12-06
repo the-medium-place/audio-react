@@ -8,6 +8,8 @@ import AudioTool from '../../components/AudioTool';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import RecordingList from '../../components/RecordingList';
+import useWindowDimensions from '../../hooks/WindowDimensions';
+import soundbar from '../../assets/images/soundbar.png';
 
 const toastSaveStyles = {
     position: 'fixed',
@@ -27,23 +29,15 @@ const toastClearStyles = {
 
 export default function UserPage(props) {
 
+    const { height, width } = useWindowDimensions();
+
     const { profileState, setProfileState, leftEarDecibels, setLeftEarDecibels, rightEarDecibels, setRightEarDecibels } = props;
 
     const history = useHistory();
 
-    // const params = useParams();
-
-
-    // const [profileState, setProfileState] = useState({
-    //     username: '',
-    //     email: '',
-    //     id: '',
-    // })
-    // const [rightEarDecibels, setRightEarDecibels] = useState([null, null, null, null, null, null, null]);
-    // const [leftEarDecibels, setLeftEarDecibels] = useState([null, null, null, null, null, null, null]);
-
     const [toastSaveShow, setToastSaveShow] = useState(false)
     const [toastClearShow, setToastClearShow] = useState(false)
+    const [rawEarData, setRawEarData] = useState([])
 
 
     useEffect(fetchUserData, [history])
@@ -71,6 +65,10 @@ export default function UserPage(props) {
 
                 setRightEarDecibels(JSON.parse(profileData.data.rightEar));
                 setLeftEarDecibels(JSON.parse(profileData.data.leftEar));
+                setRawEarData({
+                    rightEar: profileData.data.rightEar,
+                    leftEar: profileData.data.leftEar
+                })
             }
         })
             .catch(err => {
@@ -105,46 +103,72 @@ export default function UserPage(props) {
         fetchUserData()
     }
 
+    function handleChartRestore() {
+        setLeftEarDecibels(JSON.parse(rawEarData.leftEar))
+        setRightEarDecibels(JSON.parse(rawEarData.rightEar))
+    }
+
 
     return (
         <div className="UserPage">
             <Row className="my-5">
-                <Col sm={12}>
-                    <h1>Hello {profileState.username}! <small>Welcome Back!</small></h1>
+                <Col sm={12} style={{background: `url(${soundbar}) left bottom repeat`, height: 178 }} className="p-3 d-flex align-items-end">
+                    <div className="d-flex tex-center p-2 rounded text-light" style={{background: 'rgba(0, 0, 0, 0.4)'}}>
+                        <h1 className="font-weight-bold">Hello {profileState.username}! <small>Welcome Back!</small></h1>
+                    </div>
                 </Col>
             </Row>
             {/* EAR CHART COMPONENT */}
-            <Chart handleChartClear={handleChartClear} handleChartSave={handleChartSave} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} setRightEarDecibels={setRightEarDecibels} setLeftEarDecibels={setLeftEarDecibels} />
+            <Chart
+                handleChartRestore={handleChartRestore}
+                handleChartClear={handleChartClear}
+                handleChartSave={handleChartSave}
+                rightEarDecibels={rightEarDecibels}
+                leftEarDecibels={leftEarDecibels}
+                setRightEarDecibels={setRightEarDecibels}
+                setLeftEarDecibels={setLeftEarDecibels}
+            />
+
+            <hr />
 
             {/* AUDIO RECORDING COMPONENT */}
-            <AudioTool rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} profileState={profileState} fetchUserData={fetchUserData} />
+            <AudioTool
+                rightEarDecibels={rightEarDecibels}
+                leftEarDecibels={leftEarDecibels}
+                profileState={profileState}
+                fetchUserData={fetchUserData}
+            />
 
             {/* LIST OF USER RECORDINGS */}
-            {console.log(profileState.audioBlobs.length)}
             {profileState.audioBlobs.length > 0 ? (
-                <Row className="d-flex justify-content-center">
-                    <Col md={12} lg={10}>
-                        <Table striped bordered hover variant="dark" >
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Recording Name</th>
-                                    <th>Audio Player</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {profileState.audioBlobs.map((recording, i) => {
-                                    return (
-                                        <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
-                                    )
-                                })}
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+                <>
+                    <Row className=" mt-3 d-flex justify-content-center text-center">
+                        <span className="w-100 rounded p-1 font-weight-bold text-light bg-secondary shadow-sm mb-2" style={{ fontSize: '2.2rem' }}>
+                            My Recordings
+                        </span>
+                    </Row>
+                    <Row className="d-flex justify-content-center">
+                        <Col md={12} lg={10}>
+                            <Table striped bordered hover variant="dark" className="shadow">
+                                <thead>
+                                    <tr>
+                                        <th>Recording</th>
+                                        <th>Player</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {profileState.audioBlobs.map((recording, i) => {
+                                        return (
+                                            <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
+                                        )
+                                    })}
+                                </tbody>
+                            </Table>
+                        </Col>
+                    </Row>
+                </>
             ) : null}
-
             {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>
                 <Toast.Header>

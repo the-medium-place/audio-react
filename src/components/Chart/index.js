@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { Col, Row, Button } from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
 import 'chartjs-plugin-dragdata/dist/chartjs-plugin-dragdata.js';
-
+import useWindowDimensions from '../../hooks/WindowDimensions';
 
 
 export default function Chart(props) {
+
+    const { width, height } = useWindowDimensions();
 
     const [showState, setShowState] = useState(false);
     const [earState, setEarState] = useState(false);
@@ -248,41 +250,78 @@ export default function Chart(props) {
         }
     }
 
+    const chartClasses = {
+        lgScreen: "d-flex justify-content-center w-100 rounded shadow p-3 bg-light",
+        smScreen: "d-flex justify-content-center w-100 rounded shadow p-3 bg-light"
+    }
 
     return (
         <div className="Chart mb-3">
             <Row>
                 <Col className="d-flex justify-content-center">
-                    <Button onClick={() => setShowState(!showState)}>{showState ? 'Hide ear chart' : 'Show ear chart'}</Button>
+                    {showState ? null : (
+                        <Button
+                            className="btn-lg"
+                            onClick={() => setShowState(!showState)}
+                        >
+                            Show Ear Chart
+                        </Button>
+                    )}
+                    {/* <Button
+                        onClick={() => setShowState(!showState)}
+                        className="btn-lg"
+                    >
+                        {showState ? null : 'Show ear chart'}
+                    </Button> */}
                 </Col>
             </Row>
             {showState ? (<>
-            <Row className="mt-3">
-                <Col>
-                    <p>
-                        Welcome to the Ear Chart! You should have received a chart that looks very similar to the one below from your audiologist. All you have to do is make our chart look like yours! Clicks the 'Ear Setting' button below to toggle between adding <span className="text-danger">Right-Ear</span>or <span className="text-primary">Left-Ear</span> datapoints. Then you can drag the points into place! Save with the 'Save' button, or click 'Clear' to start over with a fresh chart!
-                    </p>
-                </Col>
-            </Row>
-                <Row>
-                    <Col sm={12} className="rounded shadow p-3">
-                        <Line data={chartData} options={chartOptions} />
+                <Row className="d-flex">
+                    <Col className="d-flex justify-content-end">
+                        <button
+                            type="button"
+                            class="close"
+                            aria-label="Close"
+                            onClick={() => setShowState(!showState)}
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </Col>
                 </Row>
-                <Row className="mt-3">
-                    <Col>
-                    <div className="d-flex rounded border p-1 pt-2 text-center justify-content-center bg-secondary text-light">
-
-                        <h5>Currently setting {earState ? <Button onClick={() => setEarState(!earState)} variant="danger">RIGHT</Button> : <Button onClick={() => setEarState(!earState)} variant="primary">LEFT</Button>} ear</h5>
-                    </div>
+                <Row className="mt-3 d-flex justify-content-center">
+                    <Col sm={10} className="bg-light mb-2 rounded shadow-sm pt-3">
+                        <p>
+                            Welcome to the Ear Chart! You should have received a chart that looks very similar to the one below from your audiologist. All you have to do is make our chart look like yours! Clicks the 'Ear Setting' button below to toggle between adding <span className="text-danger font-weight-bold">Right-Ear</span> or <span className="text-primary font-weight-bold">Left-Ear</span> datapoints. Then you can drag the points into place! Save with the 'Save' button, or click 'Clear' to start over with a fresh chart!
+                        </p>
                     </Col>
-                    <Col className="d-flex justify-content-end">
-                        <div className="p-3">
-                        <Button onClick={props.handleChartClear} variant="warning" className="m-1">
-                            Clear chart
-                        </Button>
-                        <Button onClick={props.handleChartSave} variant="success" className="m-1">
-                            Save Values
+                </Row>
+                <Row>
+                    <div className={width < 450 ? chartClasses.smScreen : chartClasses.lgScreen}>
+                        <Line data={chartData} options={chartOptions} />
+                    </div>
+                </Row>
+                <Row className="mt-3">
+                    <Col md={6}>
+                        <div className="d-flex flex-column rounded p-1 pt-2 text-center justify-content-center bg-secondary text-light shadow-sm">
+
+                            <div>
+                                <h4 className="border-bottom border-light pb-2 font-weight-bold">Ear Data:</h4>
+                            </div>
+                            <div >
+                                <h5>Currently adding {earState ? <Button onClick={() => setEarState(!earState)} variant="danger" className="btn-lg">RIGHT</Button> : <Button onClick={() => setEarState(!earState)} variant="primary" className="btn-lg">LEFT</Button>} ear data</h5>
+                            </div>
+                        </div>
+                    </Col>
+                    <Col md={6} className="d-flex justify-content-end">
+                        <div className="p-3 d-flex align-items-center bg-secondary rounded shadow-sm">
+                            <Button onClick={props.handleChartClear} variant="warning" className="m-1 btn-lg">
+                                Clear chart
+                            </Button>
+                            <Button onClick={props.handleChartRestore} className="m-1 btn-lg">
+                                Restore values
+                            </Button>
+                            <Button onClick={props.handleChartSave} variant="success" className="m-1 btn-lg">
+                                Save values
                         </Button>
                         </div>
                     </Col>

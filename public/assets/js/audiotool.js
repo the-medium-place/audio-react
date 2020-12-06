@@ -117,6 +117,9 @@ function updateButtonState() {
     const buttonPause = document.getElementById('pause-btn');
     const buttonResume = document.getElementById('resume-btn');
 
+    status.classList.remove("d-none")
+    console.log(status.classList)
+
     switch (mediaRecorder.state) {
         case 'inactive':
             buttonCreate.disabled = false;
