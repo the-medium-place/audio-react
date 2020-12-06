@@ -23,7 +23,7 @@ console.log()
 export default function RecordingList(props) {
 
 
-    console.log((props.recording.audioURL));
+    // console.log((props.recording.audioURL));
 
     async function handleDelete() {
         props.deleteRecording(props.recording.id);

@@ -312,7 +312,7 @@ export default function Chart(props) {
                             </div>
                         </div>
                     </Col>
-                    <Col md={6} className="d-flex justify-content-end">
+                    <Col md={6} className={width < 768 ? "d-flex justify-content-center" : "d-flex justify-content-end"}>
                         <div className="p-3 d-flex align-items-center bg-secondary rounded shadow-sm">
                             <Button onClick={props.handleChartClear} variant="warning" className="m-1 btn-lg">
                                 Clear chart

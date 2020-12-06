@@ -112,7 +112,7 @@ function App() {
           </Switch>
 
         </Container>
-        <footer className="footer bg-dark text-light sticky-bottom">
+        <footer className="footer text-light sticky-bottom">
           <div className="d-flex justify-content-end align-items-end p-2 pr-4">
             <a href="mailto:zgstowell@gmail.com" style={{color:'white'}}>
               <span>
