@@ -112,7 +112,7 @@ export default function UserPage(props) {
     return (
         <div className="UserPage">
             <Row className="my-5">
-                <Col sm={12} style={{background: `url(${soundbar}) left bottom repeat`, height: 178 }} className="p-3 d-flex align-items-end">
+                <Col sm={12} style={{background: `url(${soundbar}) center bottom repeat`, height: 178, filter:'drop-shadow(10px 15px 2rem rgba(0, 0, 0, 0.4))' }} className="p-3 d-flex align-items-end">
                     <div className="d-flex tex-center p-2 rounded text-light" style={{background: 'rgba(0, 0, 0, 0.4)'}}>
                         <h1 className="font-weight-bold">Hello {profileState.username}! <small>Welcome Back!</small></h1>
                     </div>
@@ -147,7 +147,7 @@ export default function UserPage(props) {
                             My Recordings
                         </span>
                     </Row>
-                    <Row className="d-flex justify-content-center">
+                    <Row className="d-flex justify-content-center pb-5">
                         <Col md={12} lg={10}>
                             <Table striped bordered hover variant="dark" className="shadow">
                                 <thead>
