@@ -112,7 +112,12 @@ function App() {
           </Switch>
 
         </Container>
- 
+        <footer id="footer" class="text-dark">
+          <p>
+            &copy; &lt; ZGS &gt;  2020
+          </p>
+        </footer>
+
       </Router>
     </div>
   );

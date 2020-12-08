@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Chart from '../../components/Chart';
-import { Row, Col, Toast, Table } from 'react-bootstrap';
+import { Row, Col, Toast, Table, ButtonGroup, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../../utils/API';
 import { useHistory } from 'react-router-dom';
@@ -38,6 +38,9 @@ export default function UserPage(props) {
     const [toastSaveShow, setToastSaveShow] = useState(false)
     const [toastClearShow, setToastClearShow] = useState(false)
     const [rawEarData, setRawEarData] = useState([])
+    const [showAudioToolState, setShowAudioToolState] = useState(false);
+    const [showChartState, setShowChartState] = useState(true)
+    const [recordingListShow, setRecordingListShow] = useState(false)
 
 
     useEffect(fetchUserData, [history])
@@ -112,63 +115,90 @@ export default function UserPage(props) {
     return (
         <div className="UserPage">
             <Row className="my-5">
-                <Col sm={12} style={{background: `url(${soundbar}) center bottom repeat`, height: 178, filter:'drop-shadow(10px 15px 2rem rgba(0, 0, 0, 0.4))' }} className="p-3 d-flex align-items-end">
-                    <div className="d-flex tex-center p-2 rounded text-light" style={{background: 'rgba(0, 0, 0, 0.4)'}}>
+                <Col sm={12} style={{ background: `url(${soundbar}) center bottom repeat`, height: 178, filter: 'drop-shadow(10px 15px 2rem rgba(0, 0, 0, 0.4))' }} className="p-3 d-flex align-items-end">
+                    <div className="d-flex tex-center p-2 rounded text-light" style={{ background: 'rgba(0, 0, 0, 0.4)' }}>
                         <h1 className="font-weight-bold">Hello {profileState.username}! <small>Welcome Back!</small></h1>
                     </div>
                 </Col>
             </Row>
+            <Row>
+                <Col>
+                    <ButtonGroup>
+                        <Button className="btn-lg shadow" variant={showChartState ? 'success':'secondary'} onClick={() => setShowChartState(!showChartState)}>My Ear Chart</Button>
+                        <Button className="btn-lg shadow" variant={showAudioToolState ? 'success':'secondary'} onClick={() => setShowAudioToolState(!showAudioToolState)}>My Audio Tool</Button>
+                        <Button className="btn-lg shadow" variant={recordingListShow ? 'success':'secondary'} onClick={() => setRecordingListShow(!recordingListShow)}>My Recordings</Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
             {/* EAR CHART COMPONENT */}
-            <Chart
-                handleChartRestore={handleChartRestore}
-                handleChartClear={handleChartClear}
-                handleChartSave={handleChartSave}
-                rightEarDecibels={rightEarDecibels}
-                leftEarDecibels={leftEarDecibels}
-                setRightEarDecibels={setRightEarDecibels}
-                setLeftEarDecibels={setLeftEarDecibels}
-            />
-
+            {showChartState ?
+                <Chart
+                    handleChartRestore={handleChartRestore}
+                    handleChartClear={handleChartClear}
+                    handleChartSave={handleChartSave}
+                    rightEarDecibels={rightEarDecibels}
+                    leftEarDecibels={leftEarDecibels}
+                    setRightEarDecibels={setRightEarDecibels}
+                    setLeftEarDecibels={setLeftEarDecibels}
+                    setShowChartState={setShowChartState}
+                /> : null}
             <hr />
 
             {/* AUDIO RECORDING COMPONENT */}
-            <AudioTool
-                rightEarDecibels={rightEarDecibels}
-                leftEarDecibels={leftEarDecibels}
-                profileState={profileState}
-                fetchUserData={fetchUserData}
-            />
+            {showAudioToolState ?
+                <AudioTool
+                    rightEarDecibels={rightEarDecibels}
+                    leftEarDecibels={leftEarDecibels}
+                    profileState={profileState}
+                    fetchUserData={fetchUserData}
+                    setShowAudioToolState={setShowAudioToolState}
+                /> : null}
 
             {/* LIST OF USER RECORDINGS */}
-            {profileState.audioBlobs.length > 0 ? (
-                <>
-                    <Row className=" mt-3 d-flex justify-content-center text-center">
-                        <span className="w-100 rounded p-1 font-weight-bold text-light bg-secondary shadow-sm mb-2" style={{ fontSize: '2.2rem' }}>
-                            My Recordings
+            {recordingListShow ? (
+                profileState.audioBlobs.length > 0 ? (
+                    <>
+                        <Row className="d-flex">
+                            <Col className="d-flex justify-content-end">
+                                <button
+                                    type="button"
+                                    class="close"
+                                    aria-label="Close"
+                                    onClick={() => setRecordingListShow(!recordingListShow)}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </Col>
+                        </Row>
+                        <Row className=" mt-3 d-flex justify-content-center text-center">
+                            <span className="w-100 rounded p-1 font-weight-bold text-light bg-secondary shadow-sm mb-2" style={{ fontSize: '2.2rem' }}>
+                                My Recordings
                         </span>
-                    </Row>
-                    <Row className="d-flex justify-content-center pb-5">
-                        <Col md={12} lg={10}>
-                            <Table striped bordered hover variant="dark" className="shadow">
-                                <thead>
-                                    <tr>
-                                        <th>Recording</th>
-                                        <th>Player</th>
-                                        <th>Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {profileState.audioBlobs.map((recording, i) => {
-                                        return (
-                                            <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
-                                        )
-                                    })}
-                                </tbody>
-                            </Table>
-                        </Col>
-                    </Row>
-                </>
+                        </Row>
+                        <Row className="d-flex justify-content-center pb-5">
+                            <Col md={12} lg={10}>
+                                <Table striped bordered hover variant="dark" className="shadow">
+                                    <thead>
+                                        <tr>
+                                            <th>Recording</th>
+                                            <th>Player</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {profileState.audioBlobs.map((recording, i) => {
+                                            return (
+                                                <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                    </>
+                ) : <h1>No recordings yet! Open the Audio Tool to begin recording</h1>
             ) : null}
+            <hr />
             {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>
                 <Toast.Header>
