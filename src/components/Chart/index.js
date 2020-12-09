@@ -250,18 +250,22 @@ export default function Chart(props) {
         }
     }
 
-    const chartClasses = {
+    const classes = {
         lgScreen: "d-flex justify-content-center w-100 rounded shadow p-3 bg-light",
-        smScreen: "d-flex justify-content-center w-100 rounded shadow p-3 bg-light"
+        smScreen: "d-flex justify-content-center w-100 rounded shadow p-3 bg-light",
+        lgScreenBtnsDiv: "d-flex flex-column rounded p-1 pt-2 text-center justify-content-center bg-secondary text-light shadow-sm",
+        smScreenBtnsDiv: "d-flex flex-column rounded-top p-1 pt-2 text-center justify-content-center bg-secondary text-light shadow-sm",
+        lgScreenToggleEarDiv:"p-3 d-flex align-items-center bg-secondary rounded shadow-sm",
+        smScreenToggleEarDiv:"p-3 d-flex align-items-center bg-secondary rounded-bottom shadow-sm"
     }
 
     return (
         <div className="Chart mb-3">
             <Row className="d-flex">
-                <Col className="d-flex justify-content-end">
+                <Col className="d-flex justify-content-end"> 
                     <button
                         type="button"
-                        class="close"
+                        className="close"
                         aria-label="Close"
                         onClick={() => props.setShowChartState(false)}
                     >
@@ -277,13 +281,13 @@ export default function Chart(props) {
                 </Col>
             </Row>
             <Row>
-                <div className={width < 450 ? chartClasses.smScreen : chartClasses.lgScreen}>
+                <div className={width < 450 ? classes.smScreen : classes.lgScreen}>
                     <Line data={chartData} options={chartOptions} />
                 </div>
             </Row>
             <Row className="mt-3">
                 <Col md={6}>
-                    <div className="d-flex flex-column rounded p-1 pt-2 text-center justify-content-center bg-secondary text-light shadow-sm">
+                    <div className={width > 768 ? classes.lgScreenBtnsDiv : classes.smScreenBtnsDiv}>
 
                         <div>
                             <h4 className="border-bottom border-light pb-2 font-weight-bold">Ear Data:</h4>
@@ -294,15 +298,15 @@ export default function Chart(props) {
                     </div>
                 </Col>
                 <Col md={6} className={width < 768 ? "d-flex justify-content-center" : "d-flex justify-content-end"}>
-                    <div className="p-3 d-flex align-items-center bg-secondary rounded shadow-sm">
+                    <div className={width < 768 ? classes.smScreenToggleEarDiv : classes.lgScreenToggleEarDiv}>
                         <Button onClick={props.handleChartClear} variant="warning" className="m-1 btn-lg">
                             Clear chart
                             </Button>
                         <Button onClick={props.handleChartRestore} className="m-1 btn-lg">
-                            Restore values
+                            Restore chart
                             </Button>
                         <Button onClick={props.handleChartSave} variant="success" className="m-1 btn-lg">
-                            Save values
+                            Save chart
                         </Button>
                     </div>
                 </Col>

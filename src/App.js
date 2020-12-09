@@ -110,14 +110,12 @@ function App() {
               <h1>404 not found</h1>
             </Route>
           </Switch>
-
         </Container>
-        <footer id="footer" class="text-dark">
-          <p>
+        <footer id="footer" className="text-dark">
+          <p className="p-3">
             &copy; &lt; ZGS &gt;  2020
           </p>
         </footer>
-
       </Router>
     </div>
   );

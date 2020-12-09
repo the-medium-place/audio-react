@@ -18,7 +18,7 @@ let audioFile;
 // utilized in play-btn click listener
 let audioEl;
 
-console.log('navigator.mediaDevices: ', navigator.mediaDevices)
+// console.log('navigator.mediaDevices: ', navigator.mediaDevices)
 console.log('audiotool connected')
 
 // USER CLICKS CREATE BUTTON

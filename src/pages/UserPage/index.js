@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Chart from '../../components/Chart';
 import { Row, Col, Toast, Table, ButtonGroup, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import API from '../../utils/API';
 import { useHistory } from 'react-router-dom';
 import AudioTool from '../../components/AudioTool';
-import AudioPlayer from 'react-h5-audio-player';
+// import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import RecordingList from '../../components/RecordingList';
-import useWindowDimensions from '../../hooks/WindowDimensions';
+// import useWindowDimensions from '../../hooks/WindowDimensions';
 import soundbar from '../../assets/images/soundbar.png';
 
 const toastSaveStyles = {
@@ -29,7 +29,7 @@ const toastClearStyles = {
 
 export default function UserPage(props) {
 
-    const { height, width } = useWindowDimensions();
+    // const { height, width } = useWindowDimensions();
 
     const { profileState, setProfileState, leftEarDecibels, setLeftEarDecibels, rightEarDecibels, setRightEarDecibels } = props;
 
@@ -43,7 +43,9 @@ export default function UserPage(props) {
     const [recordingListShow, setRecordingListShow] = useState(false)
 
 
-    useEffect(fetchUserData, [history])
+    useEffect(() => {
+        fetchUserData()
+    }, [history])
 
     function fetchUserData() {
         const token = localStorage.getItem('token');
@@ -55,7 +57,6 @@ export default function UserPage(props) {
                 alert('your session has expired, please login')
                 history.push('/')
             }
-
 
             if (profileData) {
                 console.log(profileData)
@@ -75,9 +76,13 @@ export default function UserPage(props) {
             }
         })
             .catch(err => {
-                if (err.response) {
+                console.log(err)
+                if (err.status === 401) {
                     console.log(err.response)
                     alert(err.response.data)
+                    history.push('/')
+                } else {
+                    alert('Something went wrong - please log in again')
                     history.push('/')
                 }
             })
@@ -124,9 +129,21 @@ export default function UserPage(props) {
             <Row>
                 <Col>
                     <ButtonGroup>
-                        <Button className="btn-lg shadow" variant={showChartState ? 'success':'secondary'} onClick={() => setShowChartState(!showChartState)}>My Ear Chart</Button>
-                        <Button className="btn-lg shadow" variant={showAudioToolState ? 'success':'secondary'} onClick={() => setShowAudioToolState(!showAudioToolState)}>My Audio Tool</Button>
-                        <Button className="btn-lg shadow" variant={recordingListShow ? 'success':'secondary'} onClick={() => setRecordingListShow(!recordingListShow)}>My Recordings</Button>
+                        <Button
+                            className="btn-lg shadow"
+                            variant={showChartState ? 'success' : 'secondary'}
+                            onClick={() => setShowChartState(!showChartState)}>My Ear Chart
+                        </Button>
+                        <Button
+                            className="btn-lg shadow"
+                            variant={showAudioToolState ? 'success' : 'secondary'}
+                            onClick={() => setShowAudioToolState(!showAudioToolState)}>My Audio Tool
+                        </Button>
+                        <Button
+                            className="btn-lg shadow"
+                            variant={recordingListShow ? 'success' : 'secondary'}
+                            onClick={() => setRecordingListShow(!recordingListShow)}>My Recordings
+                        </Button>
                     </ButtonGroup>
                 </Col>
             </Row>
@@ -142,7 +159,6 @@ export default function UserPage(props) {
                     setLeftEarDecibels={setLeftEarDecibels}
                     setShowChartState={setShowChartState}
                 /> : null}
-            <hr />
 
             {/* AUDIO RECORDING COMPONENT */}
             {showAudioToolState ?
@@ -156,51 +172,65 @@ export default function UserPage(props) {
 
             {/* LIST OF USER RECORDINGS */}
             {recordingListShow ? (
-                profileState.audioBlobs.length > 0 ? (
-                    <>
-                        <Row className="d-flex">
-                            <Col className="d-flex justify-content-end">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                    onClick={() => setRecordingListShow(!recordingListShow)}
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </Col>
-                        </Row>
-                        <Row className=" mt-3 d-flex justify-content-center text-center">
-                            <span className="w-100 rounded p-1 font-weight-bold text-light bg-secondary shadow-sm mb-2" style={{ fontSize: '2.2rem' }}>
-                                My Recordings
-                        </span>
-                        </Row>
-                        <Row className="d-flex justify-content-center pb-5">
-                            <Col md={12} lg={10}>
-                                <Table striped bordered hover variant="dark" className="shadow">
-                                    <thead>
-                                        <tr>
-                                            <th>Recording</th>
-                                            <th>Player</th>
-                                            <th>Options</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {profileState.audioBlobs.map((recording, i) => {
-                                            return (
-                                                <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>
-                            </Col>
-                        </Row>
-                    </>
-                ) : <h1>No recordings yet! Open the Audio Tool to begin recording</h1>
-            ) : null}
-            <hr />
+                <>
+                    <Row className="d-flex">
+                        <Col className="d-flex justify-content-end">
+                            <button
+                                type="button"
+                                className="close"
+                                aria-label="Close"
+                                onClick={() => setRecordingListShow(!recordingListShow)}
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </Col>
+                    </Row>
+                    <Row className=" mt-3 d-flex justify-content-center text-center">
+                        <span className="w-100 rounded p-1 font-weight-bold text-light bg-secondary shadow-sm mb-2" style={{ fontSize: '2.2rem' }}>
+                            My Recordings
+                    </span>
+                    </Row>
+                    {profileState.audioBlobs.length > 0 ? (
+                        <>
+                            <Row className="d-flex justify-content-center pb-5">
+                                <Col md={12} lg={10}>
+                                    <Table
+                                        striped
+                                        bordered
+                                        hover
+                                        variant="dark"
+                                        className="shadow"
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th>Recording</th>
+                                                <th>Player</th>
+                                                <th>Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {profileState.audioBlobs.map((recording, i) => {
+                                                return (
+                                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
+                                                )
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
+                        </>
+                    ) : <h1>No recordings yet! Open the Audio Tool to begin recording</h1>
+                    }{/* END RECORDING LIST TABLE */}
+                </>) : null} {/* END RECORDING LIST SECTION */}
+
             {/* TOASTS TO APPEAR VIA USER ACTION */}
-            <Toast onClose={() => setToastSaveShow(false)} show={toastSaveShow} delay={2000} autohide style={toastSaveStyles}>
+            <Toast
+                onClose={() => setToastSaveShow(false)}
+                show={toastSaveShow}
+                delay={2000}
+                autohide
+                style={toastSaveStyles}
+            >
                 <Toast.Header>
                     <strong className="mr-auto">
                         Success! Your settings have been saved for your next visit!
@@ -210,10 +240,16 @@ export default function UserPage(props) {
                     Success! Your settings have been saved for your next visit!
                 </Toast.Body> */}
             </Toast>
-            <Toast onClose={() => setToastClearShow(false)} show={toastClearShow} delay={2000} autohide style={toastClearStyles}>
+            <Toast
+                onClose={() => setToastClearShow(false)}
+                show={toastClearShow}
+                delay={2000}
+                autohide
+                style={toastClearStyles}
+            >
                 <Toast.Header>
                     <strong className="mr-auto">
-                        You have cleared all the chart values, but your saved values are still there! Just refresh the page to see them again
+                        You have cleared all the chart values, but your saved values are still there! Click the 'Restore chart' button to retrieve your data!
                     </strong>
                 </Toast.Header>
                 {/* <Toast.Body>

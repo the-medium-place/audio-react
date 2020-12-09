@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, } from 'react-bootstrap';
 import API from '../../utils/API';
+import { ReactMic } from 'react-mic';
 
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
@@ -12,15 +13,15 @@ import { PlayFill, PauseFill, CircleFill, SquareFill, Slash } from 'react-bootst
 
 export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileState, fetchUserData, setShowAudioToolState }) {
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "/assets/js/audiotool.js";
-        script.async = true;
-        document.body.appendChild(script);
-        return () => {
-            document.body.removeChild(script);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //     script.src = "/assets/js/audiotool.js";
+    //     script.async = true;
+    //     document.body.appendChild(script);
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     }
+    // }, []);
 
     const [showState, setShowState] = useState(false)
     const [buttonState, setButtonState] = useState(true);
@@ -54,7 +55,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
             audioURL: fileInfo.secure_url,
             recordingName: fileNameState,
             cloudinaryId: fileInfo.public_id,
-            audioFile: window.audioFile
+            // audioFile: window.audioFile
         }
         console.log("audioSaveObj before save: ", audioSaveObj)
         API.saveRecording(audioSaveObj, profileState.id)
@@ -72,13 +73,32 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
         setPlayerShowState(true);
     }
 
+    // TEST FOR REACT-MIC INTEGRATION
+    const [recordState, setRecordState] = useState(false);
+
+    function startRecording() {
+        setRecordState(true);
+    }
+
+    function stopRecording() {
+        setRecordState(false);
+    }
+
+    function onData(recordedBlob) {
+        console.log('chunk on real-time data: \n===========\n', recordedBlob);
+    }
+
+    function onStop(recordedBlob) {
+        console.log('recordedBlob: \n==========\n', recordedBlob)
+    }
+
     return (
         <div className="AudioTool pb-5">
             <Row className="d-flex">
                 <Col className="d-flex justify-content-end">
                     <button
                         type="button"
-                        class="close"
+                        className="close"
                         aria-label="Close"
                         onClick={() => setShowAudioToolState(false)}
                     >
@@ -134,6 +154,19 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                         </Row>
                     </>
                 ) : null}
+            </div>
+            <div>
+                <ReactMic
+                    record={recordState}
+                    className="sound-wave"
+                    onStop={onStop}
+                    onData={onData}
+                    strokeColor="#000000"
+                    backgroundColor="#FF4081" 
+                    visualSetting="frequencyBars"
+                    />
+                <button onClick={startRecording} type="button">Start</button>
+                <button onClick={stopRecording} type="button">Stop</button>
             </div>
         </div>
     )

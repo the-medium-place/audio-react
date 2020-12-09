@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { Form, Row, Col, Button, Modal } from 'react-bootstrap';
 import API from '../../utils/API';
 import LoginForm from '../LoginForm';
 
 export default function SignUpForm(props) {
-    const history = useHistory()
+    // const history = useHistory()
 
     const [userState, setUserState] = useState({
         username: '',
@@ -39,8 +39,6 @@ export default function SignUpForm(props) {
 
             })
             .catch(err => console.log(err))
-
-        history.push('/')
     }
 
     return (
@@ -52,7 +50,7 @@ export default function SignUpForm(props) {
                             <Form.Label>Pick a username:</Form.Label>
                             <Form.Control value={userState.username} onChange={handleInputChange} name="username" type="text" placeholder="username" />
                             {userState.username.length < 5 ? (
-                                <Form.Text className="text-muted">
+                                <Form.Text className="text-danger">
                                     Username must be at least 5 characters
                                 </Form.Text>
                             ) : null}
@@ -60,26 +58,28 @@ export default function SignUpForm(props) {
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control value={userState.email} onChange={handleInputChange} name="email" type="email" placeholder="Enter email" />
-                            <Form.Text className="text-muted">
-                                We'll never share your email with anyone else.
-                            </Form.Text>
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
                             <Form.Control value={userState.password} onChange={handleInputChange} name="password" type="password" placeholder="Password" />
+                            {userState.password.length < 8 ? 
+                            <Form.Text className="text-danger">
+                                Password must be minimum 8 characters    
+                            </Form.Text> : null }
+
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword2">
                             <Form.Label>Confirm Password</Form.Label>
                             <Form.Control value={passConfState} onChange={(e) => setPassConfState(e.target.value)} name="password-conf" type="password" placeholder="Password" />
                             {(userState.password.length >= 8 && userState.password === passConfState) ? null : (
-                                <Form.Text className="text-muted" style={{ color: 'red' }}>
+                                <Form.Text className="text-danger" style={{ color: 'red' }}>
                                     Your passwords don't match!
                                 </Form.Text>)}
                         </Form.Group>
                         {/* <Form.Group controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Check me out" />
                         </Form.Group> */}
-                        <Button variant="primary" type="submit">
+                        <Button variant="secondary" type="submit" className="btn-lg">
                             Submit
                         </Button>
                     </Form>
