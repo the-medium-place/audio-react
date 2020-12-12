@@ -1,3 +1,7 @@
+// var Wave = require('@foobar404/wave');
+let wave = new Wave();
+
+
 const workerOptions = {
     OggOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@0.8.0/OggOpusEncoder.wasm',
     WebMOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@0.8.0/WebMOpusEncoder.wasm'
@@ -23,26 +27,42 @@ console.log('audiotool connected')
 
 // USER CLICKS CREATE BUTTON
 rootDiv.on("click", "#create-btn", () => {
-    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    // .then(function (stream) {
+    //     wave.fromStream(stream, "output", {
+    //        type: "shine",
+    //        colors: ["red", "white", "blue"]
+    //     });
+    //     return stream
+    //  })
         .then((stream) => {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 console.log('stop the recorder first');
                 throw new Error('stop the recorder first');
             }
+
             return stream;
         })
         .then((stream) => createMediaRecorder(stream))
+        // .then(printStreamInfo) // Just for debugging purpose.
+        .then(_ => console.log('Creating MediaRecorder is successful.'))
+        .then(initButtons)
+        .then(updateButtonState)
         .catch(e => {
             console.log(`MediaRecorder is failed: ${e.message}`);
             Promise.reject(new Error());
         })
-        // .then(printStreamInfo) // Just for debugging purpose.
-        .then(_ => console.log('Creating MediaRecorder is successful.'))
-        .then(initButtons)
-        .then(updateButtonState);
+
 })
 
 function createMediaRecorder(stream) {
+    // let wave = new Wave();
+
+
+    // wave.fromStream(stream, "oscilloscope", {
+    //     type: "shine",
+    //     colors: ["red", "white", "blue"]
+    //  });
     // Create recorder object
     let options = { mimeType: 'audio/wav' };
     mediaRecorder = new MediaRecorder(stream, options, workerOptions);
@@ -66,11 +86,13 @@ function createMediaRecorder(stream) {
         const audioElement = document.getElementById('audio-elem')
         // When stopped add a link to the player and the download link
         let blob = new Blob(dataChunks, { 'type': 'audio/wav' });
+        // clear audio data from collection array
         dataChunks = [];
         let audioURL = URL.createObjectURL(blob);
+        // give html audio element context
         audioEl = new Audio(audioURL)
         link.href = audioURL;
-        link.innerHTML="<button class='btn btn-dark'>Download</button>"
+        link.innerHTML = "<button class='btn btn-dark'>Download</button>"
         audioElement.src = audioURL;
 
         // set audio data to global var for access in react app
@@ -157,27 +179,27 @@ function updateButtonState() {
 }
 
 // Check platform
-window.addEventListener('load', function checkPlatform () {
+window.addEventListener('load', function checkPlatform() {
     // Check compatibility
     if (OpusMediaRecorder === undefined) {
-      console.error('No OpusMediaRecorder found');
+        console.error('No OpusMediaRecorder found');
     } else {
-      // Check available content types
-      let contentTypes = [
-        'audio/wave',
-        'audio/wav',
-        'audio/ogg',
-        'audio/ogg;codecs=opus',
-        'audio/webm',
-        'audio/webm;codecs=opus'
-      ];
-      contentTypes.forEach(type => {
-        console.log(type + ' is ' +
-          (MediaRecorder.isTypeSupported(type)
-            ? 'supported' : 'NOT supported'));
-      });
+        // Check available content types
+        let contentTypes = [
+            'audio/wave',
+            'audio/wav',
+            'audio/ogg',
+            'audio/ogg;codecs=opus',
+            'audio/webm',
+            'audio/webm;codecs=opus'
+        ];
+        contentTypes.forEach(type => {
+            console.log(type + ' is ' +
+                (MediaRecorder.isTypeSupported(type)
+                    ? 'supported' : 'NOT supported'));
+        });
     }
-  
+
     // Check default MIME audio format for the client's platform
     // To do this, create captureStream() polyfill.
     // function getStream (mediaElement) {
@@ -185,10 +207,10 @@ window.addEventListener('load', function checkPlatform () {
     //   const context = new AudioContext();
     //   const source = context.createMediaElementSource(mediaElement);
     //   const destination = context.createMediaStreamDestination();
-  
+
     //   source.connect(destination);
     //   source.connect(context.destination);
-  
+
     //   return destination.stream;
     // }
     // const defaultMime = document.getElementById('defaultMime')
@@ -198,8 +220,8 @@ window.addEventListener('load', function checkPlatform () {
     //   getStream(new Audio('https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3')),
     //   {}, workerOptions);
     // defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
-  }, false);
-  
+}, false);
+
 
 
 

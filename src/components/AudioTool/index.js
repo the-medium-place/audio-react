@@ -5,9 +5,41 @@ import { ReactMic } from 'react-mic';
 
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-// import API from '../../utils/API';
+import OpusMediaRecorder from 'opus-media-recorder';
+import MediaRecorder from 'opus-media-recorder';
+import OpusMediaRecorderView from '../OpusMediaRecorderView'
+
+
+// import EncoderWorker from 'worker-loader!opus-media-recorder/encoderWorker.js';
+// You should use file-loader in webpack.config.js.
+// See webpack example link in the above section for more detail.
+// import OggOpusWasm from 'opus-media-recorder/OggOpusEncoder.wasm';
+// import WebMOpusWasm from 'opus-media-recorder/WebMOpusEncoder.wasm';
+
+//TODO: move audio recorder functionality to react -- allowing to use wave.js functionality alongside it;
 
 import { PlayFill, PauseFill, CircleFill, SquareFill, Slash } from 'react-bootstrap-icons';
+
+// WAVE.js TO CREATE AUDIO OSCILLOSCOPE
+// import Wave from '@foobar404/wave';
+// const wave = new Wave();
+
+// CONFIG FOR OPUS-MEDIA-RECORDER
+// ==============================
+// const workerOptions = {
+//     encoderWorkerFactory: function () {
+//         return new Worker(process.env.PUBLIC_URL + '/opus-media-recorder/encoderWorker.umd.js')
+//     },
+//     OggOpusEncoderWasmPath: process.env.PUBLIC_URL + '/opus-media-recorder/OggOpusEncoder.wasm',
+//     WebMOpusEncoderWasmPath: process.env.PUBLIC_URL + '/opus-media-recorder/WebMOpusEncoder.wasm',
+// };
+// // Polyfill MediaRecorder
+// window.MediaRecorder = OpusMediaRecorder;
+
+// let mediaRecorder;
+
+
+
 
 
 
@@ -22,6 +54,28 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
     //         document.body.removeChild(script);
     //     }
     // }, []);
+
+    // useEffect(() => {
+    //     // Check compatibility
+    //     if (OpusMediaRecorder === undefined) {
+    //         console.error('No OpusMediaRecorder found');
+    //     } else {
+    //         // Check available content types
+    //         let contentTypes = [
+    //             'audio/wave',
+    //             'audio/wav',
+    //             'audio/ogg',
+    //             'audio/ogg;codecs=opus',
+    //             'audio/webm',
+    //             'audio/webm;codecs=opus'
+    //         ];
+    //         contentTypes.forEach(type => {
+    //             console.log(type + ' is ' +
+    //                 (MediaRecorder.isTypeSupported(type)
+    //                     ? 'supported' : 'NOT supported'));
+    //         });
+    //     }
+    // }, [])
 
     const [showState, setShowState] = useState(false)
     const [buttonState, setButtonState] = useState(true);
@@ -71,7 +125,125 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
     function handleCreateBtnClick() {
         setButtonState(false);
         setPlayerShowState(true);
+
+        // CREATION OF MEDIA STREAM
+        // navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        //     .then((stream) => {
+        //         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        //             console.log('stop the recorder first');
+        //             throw new Error('stop the recorder first');
+        //         }
+        //         return stream;
+        //     })
+        //     .then((stream) => createMediaRecorder(stream))
+        //     // .then(printStreamInfo) // Just for debugging purpose.
+        //     .then(() => console.log('Creating MediaRecorder is successful.'))
+        //     // .then(initButtons)
+        //     .catch(err => console.log(err))
+        //     .then(updateButtonState)
+        //     .catch(e => {
+        //         console.log(`MediaRecorder is failed: ${e.message}`);
+        //         Promise.reject(new Error());
+        //     })
     }
+
+    // function createMediaRecorder(stream) {
+    //     // Create recorder object
+    //     let options = { mimeType: 'audio/wav' };
+    //     mediaRecorder = new MediaRecorder(stream, options, workerOptions);
+
+    //     let dataChunks = [];
+    //     // Recorder Event Handlers
+    //     mediaRecorder.onstart = () => {
+    //         dataChunks = [];
+
+    //         console.log('Recorder started');
+    //         updateButtonState();
+    //     };
+    //     mediaRecorder.ondataavailable = (e) => {
+    //         dataChunks.push(e.data);
+
+    //         console.log('Recorder data available');
+    //         updateButtonState();
+    //     };
+    //     mediaRecorder.onstop = (e) => {
+    //         // const link = document.getElementById('download-link')
+    //         // const audioElement = document.getElementById('audio-elem')
+    //         // When stopped add a link to the player and the download link
+    //         let blob = new Blob(dataChunks, { 'type': 'audio/wav' });
+    //         // clear audio data from collection array
+    //         dataChunks = [];
+    //         let audioURL = URL.createObjectURL(blob);
+    //         // give html audio element context
+    //         // audioEl = new Audio(audioURL)
+    //         // link.href = audioURL;
+    //         // link.innerHTML="<button class='btn btn-dark'>Download</button>"
+    //         // audioElement.src = audioURL;
+
+    //         // set audio data to global var for access in react app
+    //         window.audioFile = blob;
+
+    //         // console.log(audioElement.attributes.src)
+
+    //         console.log('Recorder stopped');
+    //         updateButtonState();
+    //     };
+    //     mediaRecorder.onpause = () => console.log('Recorder paused');
+    //     mediaRecorder.onresume = () => console.log('Recorder resumed');
+    //     mediaRecorder.onerror = err => console.log('Recorder encounters error:' + err.message);
+
+    //     return stream;
+    // };
+
+    // function updateButtonState() {
+
+    //     const buttonCreate = document.getElementById('create-btn');
+    //     const buttonStart = document.getElementById('record-btn');
+    //     const buttonStop = document.getElementById('stop-btn');
+    //     // const buttonStopTracks = document.getElementById('stoptracks-btn')
+    //     const status = document.getElementById('status-text');
+    //     const link = document.getElementById('download-link');
+    //     const buttonPause = document.getElementById('pause-btn');
+    //     const buttonResume = document.getElementById('resume-btn');
+
+    //     status.classList.remove("d-none")
+    //     // console.log(status.classList)
+
+    //     switch (mediaRecorder.state) {
+    //         case 'inactive':
+    //             buttonCreate.disabled = false;
+    //             buttonStart.disabled = false;
+    //             buttonPause.disabled = true;
+    //             buttonResume.disabled = true;
+    //             buttonStop.disabled = true;
+    //             // buttonStopTracks.disabled = false; // For debugging purpose
+    //             status.innerHTML =
+    //                 link.href ? 'Recording complete. You can play or download the recording below.'
+    //                     : 'Stream created. Click the <span class="bg-danger text-light p-1"><i class="fas fa-circle"></i></span> button to start recording.';
+    //             break;
+    //         case 'recording':
+    //             buttonCreate.disabled = true;
+    //             buttonStart.disabled = true;
+    //             buttonPause.disabled = false;
+    //             buttonResume.disabled = false;
+    //             buttonStop.disabled = false;
+    //             // buttonStopTracks.disabled = false; // For debugging purpose
+    //             status.innerHTML = 'Recording. Click <span class="bg-dark text-light p-1"><i class="fas fa-square"></i></span> button to play recording.';
+    //             break;
+    //         case 'paused':
+    //             buttonCreate.disabled = true;
+    //             buttonStart.disabled = true;
+    //             buttonPause.disabled = true;
+    //             buttonResume.disabled = false;
+    //             buttonStop.disabled = false;
+    //             // buttonStopTracks.disabled = false; // For debugging purpose
+    //             status.innerHTML = 'Paused. Click "resume" button.';
+    //             break;
+    //         default:
+    //             // Maybe recorder is not initialized yet so just ingnore it.
+    //             break;
+    //     }
+    // }
 
     // TEST FOR REACT-MIC INTEGRATION
     const [recordState, setRecordState] = useState(false);
@@ -89,11 +261,33 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
     }
 
     function onStop(recordedBlob) {
+        recordedBlob.blob.type = "audio/wav"
         console.log('recordedBlob: \n==========\n', recordedBlob)
+
     }
 
     return (
         <div className="AudioTool pb-5">
+            {/* <OpusMediaRecorderView
+                onDataAvailable={(e) => {
+                    const data = [...this.state.data, e.data];
+                    this.setState({
+                        data: data,
+                        blob: new Blob(data)
+                    })
+                }}
+                render={({ state, start, stop, pause, resume }) => (
+                    <div>
+                        <p>{state}</p>
+                        <button onClick={start}>Start Recording</button>
+                        <button onClick={stop}>Stop Recording</button>
+                        <audio
+                            src={this.state.data.length ? URL.createObjectURL(this.state.blob) : ''}
+                            controls
+                        />
+                    </div>
+                )}
+            /> */}
             <Row className="d-flex">
                 <Col className="d-flex justify-content-end">
                     <button
@@ -130,6 +324,24 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                 {playerShowState ? (
                     <>
                         <Row>
+                            <Col>
+                                <div className="bg-light mt-3 w-100">
+                                    <canvas id="oscilloscope"></canvas>
+                                </div>
+                            </Col>
+                            {/* <ReactMic
+                    record={recordState}
+                    className="sound-wave"
+                    onStop={onStop}
+                    onData={onData}
+                    strokeColor="#000000"
+                    backgroundColor="#FF4081" 
+                    visualSetting="frequencyBars"
+                    />
+                <button onClick={startRecording} type="button">Start</button>
+                <button onClick={stopRecording} type="button">Stop</button> */}
+                        </Row>
+                        <Row>
                             <Col className="d-flex justify-content-center p-4">
                                 <audio style={{ width: '100%' }} id="audio-elem" style={{ filter: 'drop-shadow(5px 15px 0.8rem rgba(0, 0, 0, 0.2))' }} controls></audio>
                                 {/* {document.getElementById('audio-elem').href ? 'true':'false'} */}
@@ -155,19 +367,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     </>
                 ) : null}
             </div>
-            <div>
-                <ReactMic
-                    record={recordState}
-                    className="sound-wave"
-                    onStop={onStop}
-                    onData={onData}
-                    strokeColor="#000000"
-                    backgroundColor="#FF4081" 
-                    visualSetting="frequencyBars"
-                    />
-                <button onClick={startRecording} type="button">Start</button>
-                <button onClick={stopRecording} type="button">Stop</button>
-            </div>
+
         </div>
     )
 }

@@ -56,6 +56,9 @@ function App() {
   // }
 
   function logOutHandler() {
+    window.location.href = "/";
+    // history.push('/')
+    localStorage.clear()
     setProfileState({
       username: '',
       email: '',
@@ -64,8 +67,6 @@ function App() {
     })
     setLeftEarDecibels([null, null, null, null, null, null, null]);
     setRightEarDecibels([null, null, null, null, null, null, null]);
-    localStorage.clear()
-    window.location.href = "/";
   }
 
 

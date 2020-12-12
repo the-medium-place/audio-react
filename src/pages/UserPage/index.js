@@ -35,9 +35,14 @@ export default function UserPage(props) {
 
     const history = useHistory();
 
+    // SHOW STATES FOR TOAST MESSAGES
     const [toastSaveShow, setToastSaveShow] = useState(false)
     const [toastClearShow, setToastClearShow] = useState(false)
+
+    // RAW EAR DATA TO RESET CHART AFTER CLEAR/CHANGE
     const [rawEarData, setRawEarData] = useState([])
+
+    // SHOW STATES FOR MAIN APP TOOLS
     const [showAudioToolState, setShowAudioToolState] = useState(false);
     const [showChartState, setShowChartState] = useState(true)
     const [recordingListShow, setRecordingListShow] = useState(false)
@@ -48,11 +53,12 @@ export default function UserPage(props) {
     }, [history])
 
     function fetchUserData() {
+        console.log('fetching...')
         const token = localStorage.getItem('token');
         // console.log("token: ", token)
 
         API.getProfile(token).then(profileData => {
-            console.log("inside api function");
+            console.log("results!");
             if (!profileData) {
                 alert('your session has expired, please login')
                 history.push('/')
@@ -77,14 +83,11 @@ export default function UserPage(props) {
         })
             .catch(err => {
                 console.log(err)
-                if (err.status === 401) {
+                if (err.response) {
                     console.log(err.response)
                     alert(err.response.data)
                     history.push('/')
-                } else {
-                    alert('Something went wrong - please log in again')
-                    history.push('/')
-                }
+                } 
             })
     }
 
