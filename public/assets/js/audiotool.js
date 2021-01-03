@@ -1,5 +1,5 @@
 // var Wave = require('@foobar404/wave');
-let wave = new Wave();
+// let wave = new Wave();
 
 
 const workerOptions = {
@@ -25,16 +25,104 @@ let audioEl;
 // console.log('navigator.mediaDevices: ', navigator.mediaDevices)
 console.log('audiotool connected')
 
+// SETUP FOR AUDIO FILTERS
+// =======================
+// let hertz125 = 25,
+// hertz250 = 25,
+// hertz500 = 25,
+// hertz1000 = 25,
+// hertz2000 = 25,
+// hertz4000 = 25,
+// hertz8000 = 25
+
+// let hertzArr = [hertz125, hertz250, hertz500, hertz1000, hertz2000, hertz4000, hertz8000]
+
+// function setAudioFilters(audioURL){
+//     console.log('setting filters for: ', audioURL)
+//     // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
+//     audio = new Audio(audioURL); 
+//     audio.controls = true;
+//     // audio.preload = false;
+//     audio.crossOrigin = 'anonymous';
+//     audio.textContent = 'Your browser does not support the HTML5 audio element';
+
+
+//     console.log(audio)
+//     // console.log(audio)// HTML audio element? work with already existent one?
+//     const context = new AudioContext();
+//     const audioSource = context.createMediaElementSource(audio);
+
+//     const filter1 = context.createBiquadFilter();
+//     const filter2 = context.createBiquadFilter();
+//     const filter3 = context.createBiquadFilter();
+//     const filter4 = context.createBiquadFilter();
+//     const filter5 = context.createBiquadFilter();
+//     const filter6 = context.createBiquadFilter();
+//     const filter7 = context.createBiquadFilter();    
+
+
+//     const filterArr = [filter1, filter2, filter3, filter4, filter5, filter6, filter7]
+
+//     filterArr.forEach((filter, index) => {
+
+//         let hertz,
+//             gainVal;
+
+//         switch (index){
+//             case 0:
+//                 hertz=125;
+//                 gainVal=hertzArr[0];
+//                 break;
+
+//             case 1:
+//                 hertz=250;
+//                 gainVal=hertzArr[1];
+//                 break;
+    
+//             case 2:
+//                 hertz=500;
+//                 gainVal=hertzArr[2];
+//                 break;
+
+//             case 3:
+//                 hertz=1000;
+//                 gainVal=hertzArr[3];
+//                 break;
+
+//             case 4:
+//                 hertz=2000;
+//                 gainVal=hertzArr[4];
+//                 break;
+
+//             case 5:
+//                 hertz=4000;
+//                 gainVal=hertzArr[5];
+//                 break;
+
+//             default:
+//                 hertz=8000;
+//                 gainVal=hertzArr[6];
+//                 break;
+//         }
+//         // CONNECT THE MediaElementAudioSourceNode TO THE FILTERS/PANNERS
+//         // AND THE FILTERS/PANNERS TO THE DESTINATION  
+//         audioSource.connect(filter);
+//         filter.connect(context.destination);
+//         // CONFIGURE FILTERS
+//         filter.type = 'peaking';
+//         filter.frequency.value = hertz;
+//         filter.Q.value = 100;
+//         filter.gain.value = gainVal;
+//     })
+//     // console.log(audio)
+//     return audio;
+//     // document.getElementById('options-td-'+props.recording.id).appendChild(audio);
+// }
+
+
 // USER CLICKS CREATE BUTTON
 rootDiv.on("click", "#create-btn", () => {
     navigator.mediaDevices.getUserMedia({ audio: true })
-    // .then(function (stream) {
-    //     wave.fromStream(stream, "output", {
-    //        type: "shine",
-    //        colors: ["red", "white", "blue"]
-    //     });
-    //     return stream
-    //  })
         .then((stream) => {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 console.log('stop the recorder first');
@@ -56,21 +144,15 @@ rootDiv.on("click", "#create-btn", () => {
 })
 
 function createMediaRecorder(stream) {
-    // let wave = new Wave();
 
-
-    // wave.fromStream(stream, "oscilloscope", {
-    //     type: "shine",
-    //     colors: ["red", "white", "blue"]
-    //  });
     // Create recorder object
     let options = { mimeType: 'audio/wav' };
     mediaRecorder = new MediaRecorder(stream, options, workerOptions);
 
+    // container for raw data
     let dataChunks = [];
     // Recorder Event Handlers
     mediaRecorder.onstart = () => {
-        dataChunks = [];
 
         console.log('Recorder started');
         updateButtonState();
@@ -86,19 +168,28 @@ function createMediaRecorder(stream) {
         const audioElement = document.getElementById('audio-elem')
         // When stopped add a link to the player and the download link
         let blob = new Blob(dataChunks, { 'type': 'audio/wav' });
+    
         // clear audio data from collection array
         dataChunks = [];
         let audioURL = URL.createObjectURL(blob);
         // give html audio element context
-        audioEl = new Audio(audioURL)
+        // audioEl = new Audio(audioURL)
+
+        // SET ALL THE FILTERS
+        //=====================
+        // audioEl = setAudioFilters(audioURL)
+        // window.audioEl = audioEl
+        //=====================
+
         link.href = audioURL;
         link.innerHTML = "<button class='btn btn-dark'>Download</button>"
         audioElement.src = audioURL;
 
         // set audio data to global var for access in react app
         window.audioFile = blob;
+        window.audioURL = audioURL;
 
-        console.log(audioElement.attributes.src)
+        // console.log(audioElement.attributes.src)
 
         console.log('Recorder stopped');
         updateButtonState();
@@ -109,7 +200,6 @@ function createMediaRecorder(stream) {
 
     return stream;
 };
-
 
 function initButtons() {
     rootDiv.on('click', '#record-btn', () => mediaRecorder.start('60000'))
@@ -221,7 +311,3 @@ window.addEventListener('load', function checkPlatform() {
     //   {}, workerOptions);
     // defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
 }, false);
-
-
-
-

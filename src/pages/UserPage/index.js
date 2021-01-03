@@ -214,7 +214,7 @@ export default function UserPage(props) {
                                         <tbody>
                                             {profileState.audioBlobs.map((recording, i) => {
                                                 return (
-                                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} />
+                                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels}/>
                                                 )
                                             })}
                                         </tbody>
