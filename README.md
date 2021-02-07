@@ -3,7 +3,7 @@
 </a>
 
 
-![License: //](https://img.shields.io/badge/License-//-green.svg) 
+<!-- ![License: //](https://img.shields.io/badge/License-//-green.svg)  -->
 
 ## Description: 
 This 'work-in-progress' application is aimed at the parents of young children with impaired hearing. The user will enter data provided by their audiologist (such as the "Sensorineural Hearing Loss Audiogram"). This data is fed into a series of algorithms which create audio filters with the intention of recreating what is heard by the hearing-impaired child. Once the data is collected, the user can make recordings using their phone or laptop microphone, and the resulting recording will be played back with the generated filters. 
@@ -11,6 +11,8 @@ This 'work-in-progress' application is aimed at the parents of young children wi
 This will be a tool for audiologists to help parents understand their child's impairment and bring some clarity to the deluge of information provided to these parents. 
 
 In addition, hearing-aid devices often over compensate at many frequency levels which can make certain sounds very uncomfortable to the child wearing them. By entering the 'aided' hearing test results, parents may be able to pinpoint sounds around them which may be upsetting their young child - who may be too young or otherwise unable to communicate this on their own!
+
+***Note:** This is the 'front-end', or, 'client side' of this application. To view the 'back-end' repository, click [HERE](https://github.com/the-medium-place/audio-test-api)
 
 ## Table of Contents
 
