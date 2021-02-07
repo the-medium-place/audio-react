@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+<a href="https://zgstowell-audiology.herokuapp.com/userpage/">
+<h1>Unnamed Audio Test App</h1>
+</a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+![License: //](https://img.shields.io/badge/License-//-green.svg) 
 
-In the project directory, you can run:
+## Description: 
+This 'work-in-progress' application is aimed at the parents of young children with impaired hearing. The user will enter data provided by their audiologist (such as the "Sensorineural Hearing Loss Audiogram"). This data is fed into a series of algorithms which create audio filters with the intention of recreating what is heard by the hearing-impaired child. Once the data is collected, the user can make recordings using their phone or laptop microphone, and the resulting recording will be played back with the generated filters. 
 
-### `npm start`
+This will be a tool for audiologists to help parents understand their child's impairment and bring some clarity to the deluge of information provided to these parents. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+In addition, hearing-aid devices often over compensate at many frequency levels which can make certain sounds very uncomfortable to the child wearing them. By entering the 'aided' hearing test results, parents may be able to pinpoint sounds around them which may be upsetting their young child - who may be too young or otherwise unable to communicate this on their own!
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Table of Contents
 
-### `npm test`
+* [Usage](#usage)
+* [Technologies](#technologies)
+* [Contributing](#contributing)
+* [Questions](#questions)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Usage: 
+Navigate to the application - or click [HERE](https://zgstowell-audiology.herokuapp.com/userpage/)
 
-### `npm run build`
+### The Application
+You will see the Login page:
+<center><img src="public/assets/images/login.png" style="width:70%;"></center>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Enter the following info to log into the test account: 
+* **Username**: testuser
+* **Password**: password123
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+*If you wish to create an account, click the button that says* <span style="background: blue; padding: 3px; color: white; border-radius: 5px;">CLICK HERE TO SIGN UP</span> *and fill out the form. You will see the login form once your account is created.* 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Entering Data
+Once you log in you will see your user page and your hearing chart:
 
-### `npm run eject`
+<center><img src="public/assets/images/chart.png" style="width:70%;"></center>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This is known as a Sensorineural Hearing Loss Audiogram. Many parents receive such a chart with the data on their child's specific hearing loss. This is the only data this app is able to interperet at this time.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<center><img src="public/assets/images/chartAddData.gif" style="width:45%;">
+<img src="public/assets/images/chartAdjust.gif" style="width:45%;"></center>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+When you have saved your data, you can close the chart by clicking the 'x' in the upper right corner, or toggling the green '**My Ear Chart**' button to the grey 'off' position. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Recording Audio
+Click on the grey '**My Audio Tool**' button to open the audio recorder:
 
-## Learn More
+<center><img src="public/assets/images/recorder.png" style="width:70%;"></center>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Click on '**Creat object**' to activate the recorder. 
+* Click the red 'record' button to begin recording
+* Click the 'pause' button to pause recording
+* Click the 'pause/play' to resume recording from a pause
+* Click the 'stop' button to end the recording.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+When the recording is stopped, you are able to listen to your recording using the player directly below. **This recording will not be filtered in any way and represents the 'raw' form of the recording. You must SAVE the recording in order to apply the audio effects.** You will have the option to Save the recording, or to Download it to your computer.
 
-### Code Splitting
+### Listening to Saved Audio
+Click on the gray **My Recordings** button to open the saved recording table:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+<center><img src="public/assets/images/recordinglist.png" style="width:70%;"></center>
 
-### Analyzing the Bundle Size
+Each row of this table displays the name of this recording, an audio player of the recording (with applied filters), and a delete button for removing it from your user profile. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+***Note:** Audio filters are not fully functional! If you are an audio engineer I would welcome your input on how to approach this type of manipulation (types of filters, Q factor, etc. etc. etc.)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+## Technologies and APIs:
+* [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+* [ReactJS](http://www.reactjs.org)
+* [Axios](https://www.npmjs.com/package/axios)
+* [Bootstrap CSS](www.getbootstrap.com) / [React-Bootstrap](https://react-bootstrap.github.io/)
+* [Cloudinary](http://www.cloudinary.com)
+* [Chart.js](www.chartjs.org)
+* [chartjs-plugin-dragdata](https://github.com/chrispahm/chartjs-plugin-dragdata)
+* [OpusMediaRecorder](https://kbumsik.io/opus-media-recorder/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contributing:
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
 
-### `npm run build` fails to minify
+I am always open to suggestions and advice! If you are an audiologist or audio engineer I would be especially grateful for your input!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Questions:
+* GitHub Profile:  [the-medium-place](https://github.com/the-medium-place)
+* Email: <zgstowell@gmail.com>
+
+
+![user image](https://avatars.githubusercontent.com/u/58536071?v=4&s=50)

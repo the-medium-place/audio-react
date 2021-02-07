@@ -1,7 +1,3 @@
-// var Wave = require('@foobar404/wave');
-// let wave = new Wave();
-
-
 const workerOptions = {
     OggOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@0.8.0/OggOpusEncoder.wasm',
     WebMOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@0.8.0/WebMOpusEncoder.wasm'
@@ -18,107 +14,8 @@ let mediaRecorder;
 // Global variable to hold audio object for React State
 let audioFile;
 
-// space for audio element created from recording (for in-site playback)
-// utilized in play-btn click listener
-let audioEl;
-
 // console.log('navigator.mediaDevices: ', navigator.mediaDevices)
-console.log('audiotool connected')
-
-// SETUP FOR AUDIO FILTERS
-// =======================
-// let hertz125 = 25,
-// hertz250 = 25,
-// hertz500 = 25,
-// hertz1000 = 25,
-// hertz2000 = 25,
-// hertz4000 = 25,
-// hertz8000 = 25
-
-// let hertzArr = [hertz125, hertz250, hertz500, hertz1000, hertz2000, hertz4000, hertz8000]
-
-// function setAudioFilters(audioURL){
-//     console.log('setting filters for: ', audioURL)
-//     // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
-//     audio = new Audio(audioURL); 
-//     audio.controls = true;
-//     // audio.preload = false;
-//     audio.crossOrigin = 'anonymous';
-//     audio.textContent = 'Your browser does not support the HTML5 audio element';
-
-
-//     console.log(audio)
-//     // console.log(audio)// HTML audio element? work with already existent one?
-//     const context = new AudioContext();
-//     const audioSource = context.createMediaElementSource(audio);
-
-//     const filter1 = context.createBiquadFilter();
-//     const filter2 = context.createBiquadFilter();
-//     const filter3 = context.createBiquadFilter();
-//     const filter4 = context.createBiquadFilter();
-//     const filter5 = context.createBiquadFilter();
-//     const filter6 = context.createBiquadFilter();
-//     const filter7 = context.createBiquadFilter();    
-
-
-//     const filterArr = [filter1, filter2, filter3, filter4, filter5, filter6, filter7]
-
-//     filterArr.forEach((filter, index) => {
-
-//         let hertz,
-//             gainVal;
-
-//         switch (index){
-//             case 0:
-//                 hertz=125;
-//                 gainVal=hertzArr[0];
-//                 break;
-
-//             case 1:
-//                 hertz=250;
-//                 gainVal=hertzArr[1];
-//                 break;
-    
-//             case 2:
-//                 hertz=500;
-//                 gainVal=hertzArr[2];
-//                 break;
-
-//             case 3:
-//                 hertz=1000;
-//                 gainVal=hertzArr[3];
-//                 break;
-
-//             case 4:
-//                 hertz=2000;
-//                 gainVal=hertzArr[4];
-//                 break;
-
-//             case 5:
-//                 hertz=4000;
-//                 gainVal=hertzArr[5];
-//                 break;
-
-//             default:
-//                 hertz=8000;
-//                 gainVal=hertzArr[6];
-//                 break;
-//         }
-//         // CONNECT THE MediaElementAudioSourceNode TO THE FILTERS/PANNERS
-//         // AND THE FILTERS/PANNERS TO THE DESTINATION  
-//         audioSource.connect(filter);
-//         filter.connect(context.destination);
-//         // CONFIGURE FILTERS
-//         filter.type = 'peaking';
-//         filter.frequency.value = hertz;
-//         filter.Q.value = 100;
-//         filter.gain.value = gainVal;
-//     })
-//     // console.log(audio)
-//     return audio;
-//     // document.getElementById('options-td-'+props.recording.id).appendChild(audio);
-// }
-
+console.log('audiotool.js connected')
 
 // USER CLICKS CREATE BUTTON
 rootDiv.on("click", "#create-btn", () => {
@@ -128,7 +25,6 @@ rootDiv.on("click", "#create-btn", () => {
                 console.log('stop the recorder first');
                 throw new Error('stop the recorder first');
             }
-
             return stream;
         })
         .then((stream) => createMediaRecorder(stream))
@@ -140,7 +36,6 @@ rootDiv.on("click", "#create-btn", () => {
             console.log(`MediaRecorder is failed: ${e.message}`);
             Promise.reject(new Error());
         })
-
 })
 
 function createMediaRecorder(stream) {
@@ -172,14 +67,6 @@ function createMediaRecorder(stream) {
         // clear audio data from collection array
         dataChunks = [];
         let audioURL = URL.createObjectURL(blob);
-        // give html audio element context
-        // audioEl = new Audio(audioURL)
-
-        // SET ALL THE FILTERS
-        //=====================
-        // audioEl = setAudioFilters(audioURL)
-        // window.audioEl = audioEl
-        //=====================
 
         link.href = audioURL;
         link.innerHTML = "<button class='btn btn-dark'>Download</button>"
@@ -188,8 +75,6 @@ function createMediaRecorder(stream) {
         // set audio data to global var for access in react app
         window.audioFile = blob;
         window.audioURL = audioURL;
-
-        // console.log(audioElement.attributes.src)
 
         console.log('Recorder stopped');
         updateButtonState();
@@ -203,13 +88,9 @@ function createMediaRecorder(stream) {
 
 function initButtons() {
     rootDiv.on('click', '#record-btn', () => mediaRecorder.start('60000'))
-    // buttonStart.onclick = _ => recorder.start(timeSlice.value);
     rootDiv.on('click', '#pause-btn', () => mediaRecorder.pause());
     rootDiv.on('click', '#resume-btn', () => mediaRecorder.resume());
     rootDiv.on('click', '#stop-btn', () => mediaRecorder.stop());
-    // buttonPause.onclick = _ => recorder.pause();
-    // buttonResume.onclick = _ => recorder.resume();
-    // buttonStop.onclick = _ => recorder.stop();
     rootDiv.on('click', '#stoptracks-btn', _ => {
         // stop all tracks (this will delete a mic icon from a browser tab
         recorder.stream.getTracks().forEach(i => i.stop());
@@ -223,7 +104,6 @@ function updateButtonState() {
     const buttonCreate = document.getElementById('create-btn');
     const buttonStart = document.getElementById('record-btn');
     const buttonStop = document.getElementById('stop-btn');
-    // const buttonStopTracks = document.getElementById('stoptracks-btn')
     const status = document.getElementById('status-text');
     const link = document.getElementById('download-link');
     const buttonPause = document.getElementById('pause-btn');
@@ -239,7 +119,6 @@ function updateButtonState() {
             buttonPause.disabled = true;
             buttonResume.disabled = true;
             buttonStop.disabled = true;
-            // buttonStopTracks.disabled = false; // For debugging purpose
             status.innerHTML =
                 link.href ? 'Recording complete. You can play or download the recording below.'
                     : 'Stream created. Click the <span class="bg-danger text-light p-1"><i class="fas fa-circle"></i></span> button to start recording.';
@@ -250,8 +129,7 @@ function updateButtonState() {
             buttonPause.disabled = false;
             buttonResume.disabled = false;
             buttonStop.disabled = false;
-            // buttonStopTracks.disabled = false; // For debugging purpose
-            status.innerHTML = 'Recording. Click <span class="bg-dark text-light p-1"><i class="fas fa-square"></i></span> button to play recording.';
+            status.innerHTML = 'Recording... Click the <span class="bg-dark text-light p-1"><i class="fas fa-square"></i></span> button to stop recording.';
             break;
         case 'paused':
             buttonCreate.disabled = true;
@@ -259,11 +137,10 @@ function updateButtonState() {
             buttonPause.disabled = true;
             buttonResume.disabled = false;
             buttonStop.disabled = false;
-            // buttonStopTracks.disabled = false; // For debugging purpose
             status.innerHTML = 'Paused. Click "resume" button.';
             break;
         default:
-            // Maybe recorder is not initialized yet so just ingnore it.
+            // Maybe recorder is not initialized yet so just ignore it.
             break;
     }
 }
@@ -289,25 +166,4 @@ window.addEventListener('load', function checkPlatform() {
                     ? 'supported' : 'NOT supported'));
         });
     }
-
-    // Check default MIME audio format for the client's platform
-    // To do this, create captureStream() polyfill.
-    // function getStream (mediaElement) {
-    //   const AudioContext = window.AudioContext || window.webkitAudioContext;
-    //   const context = new AudioContext();
-    //   const source = context.createMediaElementSource(mediaElement);
-    //   const destination = context.createMediaStreamDestination();
-
-    //   source.connect(destination);
-    //   source.connect(context.destination);
-
-    //   return destination.stream;
-    // }
-    // const defaultMime = document.getElementById('defaultMime')
-    // When creating MediaRecorder object without mimeType option, the API will
-    //  decide the default MIME Type depending on the browser running.
-    // let tmpRec = new MediaRecorder(
-    //   getStream(new Audio('https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3')),
-    //   {}, workerOptions);
-    // defaultMime.innerHTML = `default audio format: <strong>${tmpRec.mimeType}</strong> (Browser dependant)`;
 }, false);

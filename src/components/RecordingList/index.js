@@ -1,6 +1,4 @@
-import { instanceOf } from 'prop-types';
-import React, { useState } from 'react'
-import AudioPlayer from 'react-h5-audio-player';
+import React, { useEffect } from 'react'
 import 'react-h5-audio-player/lib/styles.css';
 
 let hertz125 = 0,
@@ -14,12 +12,16 @@ hertz8000 = 0
 // SET HERTZ VALUES TO NEGATIVE VALUE OF
 // AVERAGE OF CHART VALUE NUMBERS PLUS 25
 let hertzArr = [hertz125, hertz250, hertz500, hertz1000, hertz2000, hertz4000, hertz8000]
-let audio;
+
 
 
 
 
 export default function RecordingList(props) {
+
+    useEffect(() => {
+        props.fetchUserData()
+    }, [])
  
     // USE CHART VALUES TO ADJUST FILTER GAIN LEVELS
     hertzArr.forEach((hertzVal, i) => {
@@ -33,18 +35,14 @@ export default function RecordingList(props) {
     })
 
     function setAudioFilters(audioURL){
-        // console.log('setting filters for: ', audioURL)
+        let audio;
         // CREATE AUDIO PROCESSING CONTEXT AND FILTERS
-        // audio = new Audio(audioURL);
         audio = document.createElement('audio');
         audio.src=audioURL
         audio.controls = true;
-        // audio.preload = false;
         audio.crossOrigin = 'anonymous';
         audio.textContent = 'Your browser does not support the HTML5 audio element';
     
-        // console.log(audio)
-        // console.log(audio)// HTML audio element? work with already existent one?
         const context = new AudioContext();
         const audioSource = context.createMediaElementSource(audio);
     
@@ -108,27 +106,16 @@ export default function RecordingList(props) {
             // CONFIGURE FILTERS
             filter.type = 'peaking';
             filter.frequency.value = hertz;
-            filter.Q.value = 100;
+            filter.Q.value = 1;
             filter.gain.value = gainVal;
         })
         console.log('filterArr gain vals: \n','===========================');
         filterArr.forEach(filter=>{
-            console.log(filter.gain.value)
+            console.log(`${filter.gain.value} db gain/attenuation at ${filter.frequency.value}hz`)
         })
 
         return audio;
 }
-
-    // console.log(setAudioFilters(props.recording.audioURL))
-    // setAudioFilters(props.recording.audioURL);c
-    // console.log("audioEl: ",audioEl);
-      
-    // window.addEventListener('load', () => {
-    // //     console.log(document.getElementById('player-td-'+props.recording.id))
-    //     // document.getElementById('player-td-'+props.recording.id).innerHTML = '';
-    //     console.log('fully loaded')
-    //     document.getElementById('player-td-'+props.recording.id).innerHTML = setAudioFilters(props.recording.audioURL);
-    // })
 
     async function handleDelete() {
 
@@ -155,24 +142,16 @@ export default function RecordingList(props) {
         const delConfirm = await res.json()
         console.log("delConfirm: ",delConfirm)
     }
-    
-    const audioHTML = setAudioFilters(props.recording.audioURL)
+    const audioHTML = setAudioFilters(props.recording.audioURL).outerHTML
 
     return (
             <tr key={props.recording.id} className="RecordingList">
                 <td>{props.recording.recordingName}</td>
-                <td id={'player-td-'+props.recording.id} dangerouslySetInnerHTML={{__html: audioHTML.outerHTML}}>
-                    {console.log((setAudioFilters(props.recording.audioURL)).outerHTML)}
-                    {/* {audioElState ? console.log(audioElState) : null} */}
-                    {/* <audio src={props.recording.audioURL} controls>Your browser does not support the HTML5 audio element</audio>&lt;-- unfiltered */}
-                    {/* {audio.src ? audio : null} */}
-                    {/* AUDIO PLAYER DYNAMICALLY GENERATED */}
+                <td id={'player-td-'+props.recording.id} dangerouslySetInnerHTML={{__html: audioHTML}}>
+                    {/* DYNAMICALLY GENERATED AUDIO ELEMENT GOES HERE */}
                 </td>
                 <td id={'options-td-'+props.recording.id}>
                     <button onClick={handleDelete}>delete</button>
-                    {/* <a href={"blob:" + props.recording.audioURL} download={props.recording.recordingName.split(' ').join('') + ".wav"}><button>Download</button></a> */}
-                    {/* <a href={"blob:"+audio.src} download={props.recording.recordingName.split(' ').join('') + ".wav"}><button>Download</button></a> */}
-
                 </td>
             </tr>
     )

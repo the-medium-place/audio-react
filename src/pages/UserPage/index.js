@@ -27,6 +27,12 @@ const toastClearStyles = {
     background: 'red'
 }
 
+const logoStyles = { 
+    background: `url(${soundbar}) center bottom repeat`, 
+    height: 178, 
+    filter: 'drop-shadow(10px 15px 2rem rgba(0, 0, 0, 0.4))' 
+}
+
 export default function UserPage(props) {
 
     // const { height, width } = useWindowDimensions();
@@ -40,7 +46,7 @@ export default function UserPage(props) {
     const [toastClearShow, setToastClearShow] = useState(false)
 
     // RAW EAR DATA TO RESET CHART AFTER CLEAR/CHANGE
-    const [rawEarData, setRawEarData] = useState([])
+    const [rawEarData, setRawEarData] = useState()
 
     // SHOW STATES FOR MAIN APP TOOLS
     const [showAudioToolState, setShowAudioToolState] = useState(false);
@@ -97,9 +103,11 @@ export default function UserPage(props) {
             rightEar: JSON.stringify(rightEarDecibels),
             leftEar: JSON.stringify(leftEarDecibels)
         }
+        setRawEarData(updateObj);
         API.updateEarVals(userId, updateObj).then(res => {
             setToastSaveShow(true)
         })
+        .then(fetchUserData)
 
     }
 
@@ -111,10 +119,11 @@ export default function UserPage(props) {
 
     function deleteRecording(blobId) {
         API.deleteRecording(blobId)
-        fetchUserData()
+        .then(fetchUserData)
     }
 
     function handleChartRestore() {
+        console.log(JSON.parse(rawEarData.leftEar))
         setLeftEarDecibels(JSON.parse(rawEarData.leftEar))
         setRightEarDecibels(JSON.parse(rawEarData.rightEar))
     }
@@ -123,7 +132,7 @@ export default function UserPage(props) {
     return (
         <div className="UserPage">
             <Row className="my-5">
-                <Col sm={12} style={{ background: `url(${soundbar}) center bottom repeat`, height: 178, filter: 'drop-shadow(10px 15px 2rem rgba(0, 0, 0, 0.4))' }} className="p-3 d-flex align-items-end">
+                <Col sm={12} style={logoStyles} className="p-3 d-flex align-items-end">
                     <div className="d-flex tex-center p-2 rounded text-light" style={{ background: 'rgba(0, 0, 0, 0.4)' }}>
                         <h1 className="font-weight-bold">Hello {profileState.username}! <small>Welcome Back!</small></h1>
                     </div>
@@ -150,6 +159,7 @@ export default function UserPage(props) {
                     </ButtonGroup>
                 </Col>
             </Row>
+            <div style={{minHeight: 800}}>
             {/* EAR CHART COMPONENT */}
             {showChartState ?
                 <Chart
@@ -214,7 +224,7 @@ export default function UserPage(props) {
                                         <tbody>
                                             {profileState.audioBlobs.map((recording, i) => {
                                                 return (
-                                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels}/>
+                                                    <RecordingList key={recording.id} recording={recording} i={i} deleteRecording={deleteRecording} rightEarDecibels={rightEarDecibels} leftEarDecibels={leftEarDecibels} fetchUserData={fetchUserData}/>
                                                 )
                                             })}
                                         </tbody>
@@ -225,7 +235,7 @@ export default function UserPage(props) {
                     ) : <h1>No recordings yet! Open the Audio Tool to begin recording</h1>
                     }{/* END RECORDING LIST TABLE */}
                 </>) : null} {/* END RECORDING LIST SECTION */}
-
+            </div>
             {/* TOASTS TO APPEAR VIA USER ACTION */}
             <Toast
                 onClose={() => setToastSaveShow(false)}

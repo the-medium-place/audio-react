@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, } from 'react-bootstrap';
 import API from '../../utils/API';
 
@@ -13,7 +13,9 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
     const [fileNameState, setFileNameState] = useState('my_recording')
     const [playerShowState, setPlayerShowState] = useState(false)
 
-
+    useEffect(() => {
+        fetchUserData()
+    }, [])
 
     async function saveRecording() {
         console.log('save btn clicked');
@@ -41,32 +43,21 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
             audioURL: fileInfo.secure_url,
             recordingName: fileNameState,
             cloudinaryId: fileInfo.public_id,
-            // audioBlob: window.audioFile
         }
         console.log("audioSaveObj before save: ", audioSaveObj)
         await API.saveRecording(audioSaveObj, profileState.id)
 
         // FETCH UPDATED USER RECORDING LIST
-        console.log('done saving, now running fetchUserData()...');
-        fetchUserData();
-
-
-
+        // fetchUserData();
     }
 
     function handleCreateBtnClick() {
         setButtonState(false);
         setPlayerShowState(true);
-
-    }
-    console.log(window.MediaRecorder)
-    window.MediaRecorder.onstop = (e) => {
-        console.log('react side recorder stopped')
     }
 
     return (
         <div className="AudioTool pb-5">
-
             <Row className="d-flex">
                 <Col className="d-flex justify-content-end">
                     <button
@@ -82,7 +73,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
             <div className="p-2 mt-2 rounded shadow-sm bg-light">
                 <Row className="mt-4">
                     <Col sm={12} className="d-flex justify-content-center flex-column text-center">
-                        <h4 className="p-2 m-3" style={{ background: 'rgba(200, 0, 0, 0.4)' }}>Note: In order for the recorder to work, you must be viewing the site from secure connection.<br /> ** MAKE SURE THE WEBSITE URL SAYS 'http<strong className="text-danger">s</strong>://' **</h4>
+                        <h4 className="p-2 m-3" style={{ background: 'rgba(200, 0, 0, 0.4)' }}>Note: In order for the recorder to work, you must be viewing the site from secure connection.<br /> ** Please ensure the URL reads 'http<strong className="text-danger">s</strong>://...' **</h4>
                         <h5 className="p-2 m-3" style={{ background: 'rgba(200, 0, 0, 0.4)' }}>If you are on an iPhone, you MUST USE the native iOS Safari browser</h5>
                     </Col>
                 </Row>
@@ -105,10 +96,7 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                         <Row>
                             <Col className="d-flex justify-content-center p-4">
                                 <audio id="audio-elem" style={{ filter: 'drop-shadow(5px 15px 0.8rem rgba(0, 0, 0, 0.2))', width: '100%' }} controls>Your browser does not support the HTML5 audio element</audio>
-                                {/* {document.getElementById('audio-elem').href ? 'true':'false'} */}
-                                {/* {audio.src ? audio : ''} */}
-                                {/* {filteredAudioState ? <p>it worked!</p> : null} */}
-                            </Col>
+                           </Col>
                         </Row>
                         <Row className="d-flex justify-content-center mt-2">
                             <div className="bg-secondary rounded shadow-sm text-light p-3">
@@ -130,7 +118,6 @@ export default function AudioTool({ rightEarDecibels, leftEarDecibels, profileSt
                     </>
                 ) : null}
             </div>
-
         </div>
     )
 }
